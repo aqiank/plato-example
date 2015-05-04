@@ -1,0 +1,13 @@
+{{define "post"}}
+<div class="post">
+        <div class="post-header">
+                <h1>Post: {{.Title}}</h1>
+        </div>
+        <div class="post-body">
+                <p>{{.Content}}</p>
+        </div>
+        <div class="post-footer">
+                <small>{{.Type}} created at {{.CreatedAt.Format "2 Jan, 2006"}}</small>
+        </div>
+</div>
+{{end}}

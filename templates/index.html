@@ -1,0 +1,14 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>{{.SiteTitle}}</title>
+</head>
+<body>
+        {{range .GetPosts ""}}
+                {{$.Template . "post" .Type}}
+        {{end}}
+</body>
+</html>
+{{end}}
