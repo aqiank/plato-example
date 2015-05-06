@@ -1,5 +1,5 @@
 {
         "port": "8080",
-        "site_title": "Plato",
-        "auto_reload_templates": true
+        "auto_reload_templates": true,
+        "has_sidebar": true
 }

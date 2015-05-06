@@ -1,0 +1,19 @@
+{{define "index_user"}}
+
+<div id="recommended-projects">
+	{{range .RecommendedProjects 3}}
+		<div>
+                        {{.}}
+                        <!--
+			<img src="{{.ImageUrl}}"/>
+			<div class="caption left-align">
+				<h3>{{.Name}}</h3>
+				<h5 class="light grey-text text-lighten-3">{{.Tagline}}</h5>
+				<a href="/project/{{.ID}}" class="btn red">Find Out More</a>
+			</div>
+                        -->
+		</div>
+	{{end}}
+</div>
+
+{{end}}

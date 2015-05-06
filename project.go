@@ -47,3 +47,7 @@ func (p project) Post() entity.Post {
 func (p project) Title() string {
         return p.Post().Title()
 }
+
+func recommendedProjects() []string {
+        return []string{"foo", "bar", "baz"}
+}

@@ -1,0 +1,18 @@
+#oi-front-cover {
+        background: url(../img/front-cover.jpg);
+        background-size: cover;
+        background-position: center;
+        width: 100%;
+        height: 600px;
+}
+
+/* Front Cover */
+#oi-front-cover .header { color: white }
+#oi-front-cover a { font-size: 1.25rem; }
+
+/* Quotes */
+#oi-quotes { padding: 50px 0; }
+#oi-quotes .header { color: #606060 }
+
+/* Steps */
+#oi-steps p { font-size: 1.25rem }

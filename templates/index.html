@@ -1,14 +1,15 @@
 {{define "index"}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-        <meta charset="utf-8" />
-        <title>{{.SiteTitle}}</title>
-</head>
-<body>
-        {{range .GetPosts ""}}
-                {{$.Template . "post" .Type}}
+        {{.Include `<link href="css/style-index.css" rel="stylesheet" type="text/css">`}}
+        {{.Include `<script src="js/script-index.js"></script>`}}
+
+        {{template "header" .}}
+
+        {{if .IsLoggedIn}}
+                {{template "index_user"}}
+        {{else}}
+                {{template "index_guest"}}
         {{end}}
-</body>
-</html>
+
+        {{template "sidebar" .}}
+        {{template "footer" .}}
 {{end}}

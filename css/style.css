@@ -1,0 +1,17 @@
+.pt-full-width { width: 100% }
+.pt-text-center { text-align: center }
+.pt-fill-height { height: 100% }
+
+.pt-valign-wrapper { display: table; height: 100%; width: 100%; }
+.pt-valign { display: table-cell; vertical-align: middle; }
+
+#nav { height: 90px }
+
+h1.ui.header { font-size: 3.5rem; }
+h2.ui.header { font-size: 1.75rem; }
+h3.ui.header { font-size: 2rem }
+h4.ui.header { font-size: 1.5rem }
+
+#footer { background: #404040 }
+#footer a { color: #e0e0e0 }
+#footer h4 { color: #f0f0f0 }
