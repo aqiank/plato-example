@@ -48,4 +48,13 @@ $(document).ready(function() {
                 });
 
         $(".dropdown").dropdown();
+
+        // handle range input labels
+        $(".range-wrapper").each(function(idx, el) {
+                var input = $(el).children("input");
+                var label = $(el).children("label");
+                input.on("change input", function(e) {
+                        label.text(e.target.value + " " + label.data("name"));
+                });
+        });
 });

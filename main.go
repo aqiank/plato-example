@@ -6,7 +6,6 @@ import (
         "os"
         "os/signal"
 
-        "plato/debug"
         "plato/server"
         "plato/server/service"
 )
@@ -15,16 +14,12 @@ func indexPageHandler(w http.ResponseWriter, r *http.Request) error {
         return server.ServePage(w, r, "index")
 }
 
-func projectPageHandler(w http.ResponseWriter, r *http.Request) error {
-        return server.ServePage(w, r, "project-create")
+func newProjectPageHandler(w http.ResponseWriter, r *http.Request) error {
+        return server.ServePage(w, r, "project-new")
 }
 
 func onSignUpSuccessHandler(w http.ResponseWriter, r *http.Request, data interface{}) error {
-        switch data.(type) {
-        case int64:
-                debug.Log("Successfully signed up!")
-        }
-
+        http.Redirect(w, r, "/", 302)
         return nil
 }
 
@@ -34,7 +29,7 @@ func main() {
 
         // Demonstrate page handler
         server.HandlePage("/", indexPageHandler)
-        server.HandlePage("/project", projectPageHandler)
+        server.HandlePage("/project", newProjectPageHandler)
 
         // Demonstrate API callback
         server.SetSuccessCallback("/signup", onSignUpSuccessHandler)

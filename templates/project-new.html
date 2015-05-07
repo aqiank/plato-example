@@ -1,0 +1,67 @@
+{{define "project-new"}}
+        {{.Include `<script src="js/script-project-new.js"></script>`}}
+        {{template "header" .}}
+
+        <div class="ui page vertical padded grid">
+                <div class="column">
+                        <h3 class="ui header">New Project</h3>
+                        <form class="ui form">
+                                <h4 class="ui dividing header">Project Image</h4>
+                                <div class="field dndzone">
+                                        <input type="file" name="image">
+                                </div>
+                                <h4 class="ui dividing header">Project Information</h4>
+                                <div class="required field">
+                                        <label>Title</label>
+                                        <input type="text" name="title">
+                                </div>
+                                <div class="required field">
+                                        <label>Description</label>
+                                        <textarea name="description"></textarea>
+                                </div>
+                                <div class="field">
+                                        <h5>Requirements</h5>
+                                        <div class="four fields">
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Art Directors">0 Art Directors</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Creative Designers">0 Creative Designers</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Creative Technologists">0 Creative Technologists</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Copywriters">0 Copywriters</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                        </div>
+                                        <div class="four fields">
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Planners">0 Planners</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Managers">0 Managers</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Programmers">0 Programmers</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                                <div class="field range-wrapper">
+                                                        <label data-name="Producers">0 Producers</label>
+                                                        <input type="range" min="0" max="10" value="0">
+                                                </div>
+                                        </div>
+                                </div>
+                        </form>
+                </div>
+        </div>
+
+        {{template "sidebar" .}}
+        {{template "footer" .}}
+{{end}}
