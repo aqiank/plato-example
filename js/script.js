@@ -57,4 +57,7 @@ $(document).ready(function() {
                         label.text(e.target.value + " " + label.data("name"));
                 });
         });
+
+        // handle datepickers
+        $(".datepicker").pickadate();
 });

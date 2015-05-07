@@ -5,7 +5,7 @@
         <div class="ui page vertical padded grid">
                 <div class="column">
                         <h3 class="ui header">New Project</h3>
-                        <form class="ui form">
+                        <form class="ui form" method="POST">
                                 <h4 class="ui dividing header">Project Image</h4>
                                 <div class="field dndzone">
                                         <input type="file" name="image">
@@ -17,10 +17,10 @@
                                 </div>
                                 <div class="required field">
                                         <label>Description</label>
-                                        <textarea name="description"></textarea>
+                                        <textarea name="content"></textarea>
                                 </div>
                                 <div class="field">
-                                        <h5>Requirements</h5>
+                                        <h4>Requirements</h4>
                                         <div class="four fields">
                                                 <div class="field range-wrapper">
                                                         <label data-name="Art Directors">0 Art Directors</label>
@@ -58,6 +58,18 @@
                                                 </div>
                                         </div>
                                 </div>
+                                <div class="field">
+                                        <h4>Timeline</h4>
+                                        <div class="field">
+                                                <label>Start Date</label>
+                                                <input name="start-date" class="datepicker">
+                                        </div>
+                                        <div class="field">
+                                                <label>End Date</label>
+                                                <input name="end-date" class="datepicker">
+                                        </div>
+                                </div>
+                                <button type="submit" class="ui submit button">Submit</button>
                         </form>
                 </div>
         </div>
