@@ -1,0 +1,21 @@
+{{define "project-create"}}
+        {{template "header" .}}
+
+        <div class="ui page grid">
+                <div class="column">
+                        <form class="ui form">
+                               <div class="required field">
+                                       <label>Title</label>
+                                       <input type="text" name="title">
+                               </div>
+                               <div class="required field">
+                                       <label>Description</label>
+                                       <textarea name="description"></textarea>
+                               </div>
+                        </form>
+                </div>
+        </div>
+
+        {{template "sidebar" .}}
+        {{template "footer" .}}
+{{end}}

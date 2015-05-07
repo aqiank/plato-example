@@ -16,7 +16,7 @@ func indexPageHandler(w http.ResponseWriter, r *http.Request) error {
 }
 
 func projectPageHandler(w http.ResponseWriter, r *http.Request) error {
-        return server.ServePage(w, r, "project")
+        return server.ServePage(w, r, "project-create")
 }
 
 func onSignUpSuccessHandler(w http.ResponseWriter, r *http.Request, data interface{}) error {
@@ -25,11 +25,6 @@ func onSignUpSuccessHandler(w http.ResponseWriter, r *http.Request, data interfa
                 debug.Log("Successfully signed up!")
         }
 
-        return nil
-}
-
-func onPostNewSuccessHandler(w http.ResponseWriter, r *http.Request, data interface{}) error {
-        http.Redirect(w, r, "/", 302)
         return nil
 }
 
@@ -43,7 +38,6 @@ func main() {
 
         // Demonstrate API callback
         server.SetSuccessCallback("/signup", onSignUpSuccessHandler)
-        server.SetSuccessCallback("/post/new", onPostNewSuccessHandler)
 
         // Demonstrate files handler
         server.HandleFiles("/css/", "/font/", "/img/", "/js/")
