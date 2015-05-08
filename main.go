@@ -37,10 +37,8 @@ func newProjectHandler(w http.ResponseWriter, r *http.Request) (interface{}, err
         }
 
         tp := dateutil.TimeParser{}
-        startDateStr := r.FormValue("start-date")
-        endDateStr := r.FormValue("end-date")
-        startDate := tp.ParseDatetime(startDateStr)
-        endDate := tp.ParseDatetime(endDateStr)
+        startDate := tp.ParseDatetime(r.FormValue("start-date"))
+        endDate := tp.ParseDatetime(r.FormValue("end-date"))
         if tp.Err != nil {
                 return nil, debug.Error(err)
         }
