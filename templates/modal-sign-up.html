@@ -1,5 +1,5 @@
 {{define "modal-sign-up"}}
-        <form class="ui modal" id="form-sign-up" action="/{{.APIVersion}}/signup" method="POST">
+        <form class="ui modal" id="form-sign-up" action="/signup" method="POST">
                 <i class="close icon"></i>
                 <div class="header">
                         Sign Up
@@ -52,16 +52,23 @@
                                                         {{end}}
                                                 </select>
                                         </div>
+					<div class="required field">
+						<label>Profession</label>
+						<select name="profession" class="ui search dropdown">
+							<option value="">Choose a profession</option>
+							{{range .Professions}}
+							<option value="{{.}}">{{.}}</option>
+							{{end}}
+						</select>
+					</div>
                                 </div>
                         </div>
                 </div>
                 <div class="actions">
-                        <div class="ui black button">
-                                Cancel
-                        </div>
-                        <button type="submit" class="ui positive right labeled icon submit button">
-                                Sign Up
-                        </button>
+                        <div class="ui left floated button sign-in">Sign In</div>
+                        <div class="ui left floated google plus button"><i class="google icon"></i>Sign In with Google</div>
+                        <div class="ui black button">Cancel</div>
+                        <button type="submit" class="ui positive right labeled icon submit button">Sign Up</button>
                 </div>
         </form>
 {{end}}

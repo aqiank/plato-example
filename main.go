@@ -6,71 +6,35 @@ import (
         "os"
         "os/signal"
 
-        "plato/db/dateutil"
-        "plato/debug"
         "plato/server"
         "plato/server/service"
 )
 
 func indexPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-        return nil, server.ServePage(w, r, "index")
-}
-
-func newProjectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-        return nil, server.ServePage(w, r, "project-new")
-}
-
-func onSignUpSuccessHandler(w http.ResponseWriter, r *http.Request, data interface{}) error {
-        http.Redirect(w, r, "/", 302)
-        return nil
-}
-
-func newProjectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-        data, err := server.PostHandler(w, r)
-        if err != nil {
-                return nil, debug.Error(err)
-        }
-
-        imageURL, err := saveProjectImage(r)
-        if err != nil {
-                return nil, debug.Error(err)
-        }
-
-        tp := dateutil.TimeParser{}
-        startDate := tp.ParseDatetime(r.FormValue("start-date"))
-        endDate := tp.ParseDatetime(r.FormValue("end-date"))
-        if tp.Err != nil {
-                return nil, debug.Error(err)
-        }
-
-        postID := data.(int64)
-        status := r.FormValue("status")
-
-        id, err := InsertProject(postID, status, imageURL, startDate, endDate)
-        if err != nil {
-                return nil, debug.Error(err)
-        }
-
-        return id, nil
+        return nil, server.ServePage(w, r, "index", nil)
 }
 
 func main() {
         loadQuotes()
         loadCountries()
+        loadProfessions()
+
+	handleProject()
+	handleProfile()
 
         // Demonstrate page handler
         server.HandlePage("/", indexPageHandler)
-        server.HandlePage("/project", newProjectPageHandler)
-
-        // Demonstrate API callback
-        server.SetSuccessCallback("/signup", onSignUpSuccessHandler)
 
         // Demonstrate files handler
-        server.HandleFiles("/css/", "/font/", "/img/", "/js/")
+        server.HandleFiles("/css/", "/font/", "/img/", "/js/", "/pt-data/")
 
         // Demonstrate service
-        service.AttachAll(service.Service{"Quotes": quotes})
-        service.AttachAll(service.Service{"Countries": countries})
+        service.AttachAll(service.Service{
+		"Quotes": quotes,
+		"Countries": countries,
+		"Professions": professions,
+		"RecommendedProjects": recommendedProjects,
+	})
 
         log.Println("starting plato-example..")
 

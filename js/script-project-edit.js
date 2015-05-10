@@ -1,4 +1,5 @@
-var NewProjectRules =
+
+var EditProjectRules =
 {
         title: {
                 identifier: "title",
@@ -41,6 +42,6 @@ var NewProjectRules =
 $(document).ready(function() {
 	setImageInputPreview("#image-input", "#image-preview");
 
-	$("#form-project-new")
-		.form(NewProjectRules);
+	$("#form-project-edit")
+		.form(EditProjectRules);
 });

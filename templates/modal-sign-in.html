@@ -1,5 +1,5 @@
 {{define "modal-sign-in"}}
-        <form class="ui modal" id="form-sign-in" action="/{{.APIVersion}}/login" method="POST">
+        <form class="ui modal" id="form-sign-in" action="/login" method="POST">
                 <i class="close icon"></i>
                 <div class="header">
                         Sign In
@@ -15,15 +15,10 @@
                         </div>
                 </div>
                 <div class="actions">
-                        <div class="ui left floated button sign-up">
-                                Sign Up
-                        </div>
-                        <div class="ui black button">
-                                Cancel
-                        </div>
-                        <button type="submit" class="ui positive right labeled icon submit button">
-                                Sign In
-                        </button>
+                        <div class="ui left floated button sign-up">Sign Up</div>
+                        <div class="ui left floated google plus button"><i class="google icon"></i>Sign In with Google</div>
+                        <div class="ui black button">Cancel</div>
+                        <button type="submit" class="ui positive right labeled icon submit button">Sign In</button>
                 </div>
         </form>
 {{end}}

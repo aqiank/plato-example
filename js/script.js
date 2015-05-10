@@ -20,32 +20,16 @@ var SignInRules =
         },
 };
 
-function logout() {
-        $.post("/" + APIVersion + "/logout", function(resp) {
-                if (resp.status == "ok") {
-                        window.location = "/";
-                }
-                console.log(resp);
-        }, "json");
-}
-
 $(document).ready(function() {
-        $("#form-sign-in").form(SignInRules);
-        $("#form-sign-up").form(SignInRules);
-        $("#form-sign-in")
-                .modal("attach events", ".sign-in", "show")
-                .modal({
-                        onApprove: function() {
-                                return false;
-                        }
-                });
         $("#form-sign-up")
-                .modal("attach events", ".sign-up", "show")
-                .modal({
-                        onApprove: function() {
-                                return false;
-                        }
-                });
+		.form(SignInRules)
+		.modal({duration: 300})
+                .modal("attach events", ".sign-up");
+
+        $("#form-sign-in")
+		.form(SignInRules)
+		.modal({duration: 300})
+                .modal("attach events", ".sign-in");
 
         $(".dropdown").dropdown();
 
@@ -60,4 +44,39 @@ $(document).ready(function() {
 
         // handle datepickers
         $(".datepicker").pickadate();
+
+	// handle tabs
+	$(".menu .item").tab();
 });
+
+function setImageInputPreview(input, preview, uploadURL, success) {
+	$(input).change(function(){
+		if (this.files && this.files[0]) {
+			var reader = new FileReader();
+			var file = this.files[0];
+			reader.onload = function (e) {
+				$(preview).attr("src", e.target.result);
+				if (typeof uploadURL === "string") {
+					var data = new FormData();
+					data.append("avatar", file);
+					data.append("what", "avatar");
+					$.ajax({
+						url: uploadURL,
+						data: data,
+						cache: false,
+						contentType: false,
+						processData: false,
+						type: "POST",
+						success: function(data) {
+							if (typeof success !== "undefined") {
+								success(data);
+							}
+						}
+					});
+				}
+			}
+			reader.readAsDataURL(file);
+		}
+	});
+}
+

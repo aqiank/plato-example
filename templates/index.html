@@ -1,15 +1,14 @@
 {{define "index"}}
-        {{.Include `<link href="css/style-index.css" rel="stylesheet">`}}
-        {{.Include `<script src="js/script-index.js"></script>`}}
+        {{.Include `<link href="/css/style-index.css" rel="stylesheet">`}}
+        {{.Include `<script src="/js/script-index.js"></script>`}}
 
         {{template "header" .}}
 
         {{if .IsLoggedIn}}
-                {{template "index_user"}}
+                {{template "index_user" .}}
         {{else}}
-                {{template "index_guest"}}
+                {{template "index_guest" .}}
         {{end}}
 
-        {{template "sidebar" .}}
         {{template "footer" .}}
 {{end}}

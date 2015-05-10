@@ -1,5 +1,5 @@
 #oi-front-cover {
-        background: url(../img/front-cover.jpg);
+        background: url("../img/front-cover.jpg");
         background-size: cover;
         background-position: center;
         width: 100%;
@@ -16,3 +16,7 @@
 
 /* Steps */
 #oi-steps p { font-size: 1.25rem }
+
+/* Recommended Projects */
+#oi-recommended-projects .header { color: #f3f3f3; }
+#oi-recommended-projects .background { width: 100%; height: 600px; background-size: cover; background-position: center; }
