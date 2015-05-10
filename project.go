@@ -15,6 +15,7 @@ import (
 	"plato/debug"
 	"plato/entity"
 	"plato/server"
+	"plato/server/session"
 	"plato/server/service"
 )
 
@@ -122,6 +123,18 @@ func (p Project) Professions() []Profession {
 	}
 
 	return ps
+}
+
+func (p Project) SupportedBy(userID int64) bool {
+	return supportedProject(p.PostID, userID)
+}
+
+func (p Project) AppliedBy(userID int64) bool {
+	return appliedProject(p.PostID, userID)
+}
+
+func (p Project) JoinedBy(userID int64) bool {
+	return joinedProject(p.PostID, userID)
 }
 
 func insertProject(postID int64, tagline, status, imageURL string, startTime, endTime time.Time) (int64, error) {
@@ -256,12 +269,41 @@ out:
 }
 
 func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	user := session.User(r)
+	if !session.IsLoggedIn(user) {
+		http.Redirect(w, r, "/", 302)
+		return nil, nil
+	}
+
+	postIDStr := r.FormValue("postID")
+	postID, _ := strconv.ParseInt(postIDStr, 10, 0)
+
+	method := r.FormValue("method")
+	switch method {
+	case "support":
+		supportProject(postID, user.ID())
+		http.Redirect(w, r, "/project/"+postIDStr, 302)
+		return postID, nil
+	case "apply":
+		println("Test")
+		applyProject(postID, user.ID())
+		http.Redirect(w, r, "/project/"+postIDStr, 302)
+		return postID, nil
+	case "accept":
+		if !db.IsAuthor(postID, user.ID()) {
+			return postID, nil
+		}
+		joinProject(postID, r.FormValue("userID"))
+		http.Redirect(w, r, "/project/"+postIDStr, 302)
+		return postID, nil
+	}
+
 	data, err := server.PostHandler(w, r)
 	if err != nil {
 		return nil, debug.Error(err)
 	}
 
-	postID := data.(int64)
+	postID = data.(int64)
 	imageURL, _ := saveProjectImage(postID, r)
 
 	tp := dateutil.TimeParser{}
@@ -371,15 +413,6 @@ func updateProfession(postID int64, r *http.Request) error {
 	return nil
 }
 
-func handleProject() {
-	server.SetSuccessCallback("/post/comment", commentSuccess)
-
-        server.HandlePage("/project", projectHandler)
-        server.HandlePage("/project/", projectPageHandler)
-        server.HandlePage("/project/new", newProjectPageHandler)
-        server.HandlePage("/project/edit/", editProjectPageHandler)
-}
-
 func commentSuccess(w http.ResponseWriter, r *http.Request, data interface{}) error {
 	id, ok := data.(int64)
 	if !ok {
@@ -391,3 +424,43 @@ func commentSuccess(w http.ResponseWriter, r *http.Request, data interface{}) er
 	http.Redirect(w, r, url, 302)
 	return nil
 }
+
+func supportProject(postID, authorID int64) {
+	if err := db.UpdateMeta("post", postID, "support", strconv.FormatInt(authorID, 10)); err != nil {
+		debug.Warn(err)
+	}
+}
+
+func applyProject(postID, authorID int64) {
+	if err := db.UpdateMeta("post", postID, "apply", strconv.FormatInt(authorID, 10)); err != nil {
+		debug.Warn(err)
+	}
+}
+
+func joinProject(postID int64, userID string) {
+	if err := db.UpdateMeta("post", postID, "join", userID); err != nil {
+		debug.Warn(err)
+	}
+}
+
+func supportedProject(postID, authorID int64) bool {
+	return db.HasMeta("post", postID, "support", strconv.FormatInt(authorID, 10))
+}
+
+func appliedProject(postID, authorID int64) bool {
+	return db.HasMeta("post", postID, "apply", strconv.FormatInt(authorID, 10))
+}
+
+func joinedProject(postID, authorID int64) bool {
+	return db.HasMeta("post", postID, "join", strconv.FormatInt(authorID, 10))
+}
+
+func handleProject() {
+	server.SetSuccessCallback("/post/comment", commentSuccess)
+
+        server.HandlePage("/project", projectHandler)
+        server.HandlePage("/project/", projectPageHandler)
+        server.HandlePage("/project/new", newProjectPageHandler)
+        server.HandlePage("/project/edit/", editProjectPageHandler)
+}
+

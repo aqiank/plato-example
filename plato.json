@@ -1,5 +1,6 @@
 {
         "port": "8080",
+	"url": "http://localhost:8080",
         "auto_reload_templates": true,
         "has_sidebar": true
 }

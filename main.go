@@ -20,6 +20,7 @@ func main() {
         loadProfessions()
 
 	handleProject()
+	handleDashboard()
 	handleProfile()
 
         // Demonstrate page handler
