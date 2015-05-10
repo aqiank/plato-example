@@ -1,0 +1,75 @@
+{{define "modal-sign-up"}}
+        <form class="ui modal" id="form-sign-up" action="/signup" method="POST">
+                <i class="close icon"></i>
+                <div class="header">
+                        Sign Up
+                </div>
+                <div class="content">
+                        <div class="ui form">
+                                <h4 class="ui dividing header">Account Information</h4>
+                                <div class="required field">
+                                        <label>Email</label>
+                                        <input type="email" name="email" placeholder="Email">
+                                </div>
+                                <div class="required field">
+                                        <label>Password</label>
+                                        <input type="password" name="password" placeholder="Password">
+                                </div>
+                                <h4 class="ui dividing header">Personal Information</h4>
+                                <div class="two fields">
+                                        <div class="field">
+                                                <label>Name</label>
+                                                <div class="two fields">
+                                                        <div class="field">
+                                                                <input type="text" name="firstname" placeholder="First Name">
+                                                        </div>
+                                                        <div class="field">
+                                                                <input type="text" name="lastname" placeholder="Last Name">
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        <div class="field">
+                                                <label>Gender</label>
+                                                <div class="ui selection dropdown">
+                                                        <input type="hidden" name="gender">
+                                                        <div class="default text">Gender</div>
+                                                        <i class="dropdown icon"></i>
+                                                        <div class="menu">
+                                                                <div class="item" data-value="female">Female</div>
+                                                                <div class="item" data-value="male">Male</div>
+                                                                <div class="item" data-value="other">Other</div>
+                                                        </div>
+                                                </div>
+
+                                        </div>
+                                </div>
+                                <div class="two fields">
+                                        <div class="field">
+                                                <label>Nationality</label>
+                                                <select name="nationality" class="ui search dropdown">
+                                                        <option value="">State</option>
+                                                        {{range $code, $name := .Countries}}
+                                                        <option value="{{$code}}">{{$name}} {{$code}}</option>
+                                                        {{end}}
+                                                </select>
+                                        </div>
+					<div class="required field">
+						<label>Profession</label>
+						<select name="profession" class="ui search dropdown">
+							<option value="">Choose a profession</option>
+							{{range .Professions}}
+							<option value="{{.}}">{{.}}</option>
+							{{end}}
+						</select>
+					</div>
+                                </div>
+                        </div>
+                </div>
+                <div class="actions">
+                        <div class="ui left floated button sign-in">Sign In</div>
+                        <div class="ui left floated google plus button"><i class="google icon"></i>Sign In with Google</div>
+                        <div class="ui black button">Cancel</div>
+                        <button type="submit" class="ui positive right labeled icon submit button">Sign Up</button>
+                </div>
+        </form>
+{{end}}

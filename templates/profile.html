@@ -1,0 +1,61 @@
+{{define "profile"}}
+        {{.Include `<script src="/js/script-profile.js"></script>`}}
+        {{template "header" .}}
+
+	<div class="ui vertical padded page grid">
+		<div class="row">
+			<div class="ui segment column">
+				<h3 class="ui header">Profile</h3>
+				<div class="ui items">
+					<div class="item">
+						<label class="image">
+							<input id="avatar-input" class="pt-img-input" name="profilePicture" multiple="false" accept="image/*" type="file" />
+							{{with .User.AvatarURL}}
+							<img id="avatar-preview" class="pt-img-preview" src="{{.}}">
+							{{else}}
+							<img id="avatar-preview" class="pt-img-preview" src="/img/large/avatar.png">
+							{{end}}
+						</label>
+						<div class="content">
+							<h1 id="fullname" class="ui header">{{.User.Nicename}}</h1>
+							<div class="meta">
+								<span id="profession" class="date">{{.User.Profession}}</span> <i class="{{.User.Nationality}} flag"></i>
+							</div>
+							<div id="description" class="description">{{.HTML .User.Description}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="ui segment column">
+				<h3 class="ui header">Involved Projects</h3>
+				<div class="ui cards">
+				{{range call .RecommendedProjects}}
+					<div class="card">
+						<a class="image">
+							{{with .ImageURL}}
+							<img src="{{.}}">
+							{{else}}
+							<img src="/img/dummies/project.png">
+							{{end}}
+						</a>
+						<div class="content">
+							<a class="header">{{.Title}}</a>
+							<div class="meta">
+								Project
+							</div>
+							<div class="description">
+								{{.ShortContent 140}}
+							</div>
+						</div>
+					</div>
+				{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+        {{template "sidebar" .}}
+        {{template "footer" .}}
+{{end}}

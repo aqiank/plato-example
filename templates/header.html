@@ -1,0 +1,52 @@
+{{define "header"}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+{{template "pt-head" .}}
+{{range .Includes}}
+        {{.}}
+{{end}}
+
+</head>
+
+<div class="ui page grid">
+	<div class="column">
+		<div class="ui secondary pointing menu">
+			<a class="item" href="/">BBH OI</a>
+			{{if .IsLoggedIn}}
+			<a class="item" href="/project/new">
+				<i class="plus icon"></i> Create
+			</a>
+			<a class="item" href="/dashboard">
+				<i class="dashboard icon"></i> Dashboard
+			</a>
+			<a class="item" href="/profile">
+				<i class="user icon"></i> Profile
+			</a>
+			<div class="right menu">
+				<div class="item">
+					<form class="ui transparent icon input">
+						<input type="text" placeholder="Search...">
+						<i class="search link icon"></i>
+					</form>
+				</div>
+				<a class="ui item" href="/logout">Logout</a>
+			</div>
+			{{else}}
+			{{template "modal-sign-in" .}}<!-- #modal-sign-in -->
+			{{template "modal-sign-up" .}}<!-- #modal-sign-up -->
+			<div class="right menu">
+				<a class="ui item sign-in">Login</a>
+			</div>
+			{{end}}
+		</div>
+	</div>
+</div>
+
+<body>
+
+{{end}}

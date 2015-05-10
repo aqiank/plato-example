@@ -1,0 +1,24 @@
+{{define "modal-sign-in"}}
+        <form class="ui modal" id="form-sign-in" action="/login" method="POST">
+                <i class="close icon"></i>
+                <div class="header">
+                        Sign In
+                </div>
+                <div class="content">
+                        <div class="ui form">
+                                <div class="field">
+                                        <input type="email" name="email" placeholder="Email">
+                                </div>
+                                <div class="field">
+                                        <input type="password" name="password" placeholder="Password">
+                                </div>
+                        </div>
+                </div>
+                <div class="actions">
+                        <div class="ui left floated button sign-up">Sign Up</div>
+                        <div class="ui left floated google plus button"><i class="google icon"></i>Sign In with Google</div>
+                        <div class="ui black button">Cancel</div>
+                        <button type="submit" class="ui positive right labeled icon submit button">Sign In</button>
+                </div>
+        </form>
+{{end}}

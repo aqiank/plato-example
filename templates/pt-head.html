@@ -1,0 +1,42 @@
+{{define "pt-head"}}
+
+<script>
+var EmailLength = {{.EmailLength}};
+var PasswordLength = {{.PasswordLength}};
+</script>
+
+<!-- CSS -->
+<link href="/css/semantic.min.css" rel="stylesheet" />
+<link href="/css/slick.css" rel="stylesheet" />
+<link href="/css/slick-theme.css" rel="stylesheet" />
+<link href="/css/classic.css" rel="stylesheet" />
+<link href="/css/classic.date.css" rel="stylesheet" />
+<link href="/css/classic.time.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+
+<!-- JS -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.jeditable.min.js"></script>
+<script src="/js/semantic.min.js"></script>
+<script src="/js/slick.min.js"></script>
+<script src="/js/filedrop.min.js"></script>
+<script src="/js/picker.js"></script>
+<script src="/js/picker.date.js"></script>
+<script src="/js/picker.time.js"></script>
+<script src="/js/script.js"></script>
+
+<!-- Google Sign-In -->
+<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+<script>
+	function start() {
+		gapi.load("auth2", function() {
+			auth2 = gapi.auth2.init({
+				client_id: "400181550602-eim1qpiu9d1calf4hc0jfgk3koihich3.apps.googleusercontent.com",
+				// Scopes to request in addition to 'profile' and 'email'
+				//scope: 'additional_scope'
+			});
+		});
+	}
+</script>
+
+{{end}}

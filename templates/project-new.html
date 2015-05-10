@@ -1,0 +1,57 @@
+{{define "project-new"}}
+        {{.Include `<script src="/js/script-project-new.js"></script>`}}
+        {{template "header" .}}
+
+        <div class="ui vertical padded page grid">
+                <div class="column">
+                        <h3 class="ui header">New Project</h3>
+                        <form id="form-project-new" class="ui form" action="/project" method="POST" enctype="multipart/form-data">
+                                <h4 class="ui dividing header">Project Image</h4>
+                                <label class="field">
+                                        <input class="pt-img-input" id="image-input" type="file" name="image">
+					<img class="pt-img-preview" id="image-preview" src="/img/dummies/project.png" style="width: 100%">
+                                </label>
+                                <h4 class="ui dividing header">Project Information</h4>
+                                <div class="required field">
+                                        <label>Title</label>
+                                        <input type="text" name="title">
+                                </div>
+                                <div class="required field">
+                                        <label>Description</label>
+                                        <textarea name="content"></textarea>
+                                </div>
+                                <div class="required field">
+                                        <label>Tagline</label>
+                                        <input type="text" name="tagline">
+                                </div>
+                                <div class="field">
+                                        <h4>Requirements</h4>
+                                        <div class="four fields">
+						{{range .Professions}}
+                                                <div class="field range-wrapper">
+                                                        <label data-name="{{.}}s">0 {{.}}s</label>
+                                                        <input name="profession {{.}}" type="range" min="0" max="10" value="0">
+                                                </div>
+						{{end}}
+                                        </div>
+                                </div>
+                                <div class="field">
+                                        <h4>Timeline</h4>
+                                        <div class="required field">
+                                                <label>Start Date</label>
+                                                <input id="start-date" name="startDate" class="datepicker">
+                                        </div>
+                                        <div class="required field">
+                                                <label>End Date</label>
+                                                <input id="end-date" name="endDate" class="datepicker">
+                                        </div>
+                                </div>
+				<input type="hidden" name="method" value="POST">
+                                <button type="submit" class="ui submit button">Submit</button>
+                        </form>
+                </div>
+        </div>
+
+        {{template "sidebar" .}}
+        {{template "footer" .}}
+{{end}}
