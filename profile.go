@@ -3,8 +3,13 @@ package main
 import (
 	"errors"
 	"net/http"
+	"path"
+	"strconv"
 
+	"plato/debug"
+	"plato/db"
 	"plato/server"
+	"plato/server/service"
 	"plato/server/session"
 )
 
@@ -30,6 +35,28 @@ func profilePageHandler(w http.ResponseWriter, r *http.Request) (interface{}, er
 	return nil, nil
 }
 
+func viewProfilePageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	user := session.User(r)
+	if !session.IsLoggedIn(user) {
+		http.Redirect(w, r, "/", 302)
+		return nil, nil
+	}
+
+	base := path.Base(r.URL.Path[1:])
+	id, err := strconv.ParseInt(base, 10, 0)
+	if err != nil {
+		return nil, debug.Error(err)
+	}
+
+	otherUser, err := db.GetUser("id", id)
+	if err != nil {
+		return nil, debug.Error(err)
+	}
+
+	return nil, server.ServePage(w, r, "profile-view", service.Service{"OtherUser": otherUser})
+}
+
 func handleProfile() {
         server.HandlePage("/profile", profilePageHandler)
+        server.HandlePage("/profile/", viewProfilePageHandler)
 }

@@ -1,0 +1,131 @@
+{{define "project_tabs_content"}}
+	{{with .Project}}
+	<div class="ui bottom attached active tab" data-tab="info">
+		<div class="ui grid">
+			<div class="twelve wide column">
+				<div class="ui vertically padded grid">
+					<div class="column">
+						{{with .ImageURL}}
+						<img src="{{.}}" style="width: 100%">
+						{{else}}
+						<img src="/img/dummies/project.png">
+						{{end}}
+						<h4 class="ui header">Info</h4>
+						<h1>{{.Title}}</h1>
+						<p>{{$.HTML .Content}}</h1>
+					</div>
+				</div>
+				<div class="ui vertically padded grid">
+					<div class="column">
+						<h4 class="ui header">Requirements</h4>
+						<div class="ui two columns grid">
+							{{range .Professions}}
+							<div class="column">
+								<div class="ui teal progress" data-percent="{{$.Project.ProfessionPercentage .Name}}">
+									<div class="bar"></div>
+									<div class="label"></div>
+								</div>
+							</div>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="four wide column">
+				<div class="row">
+					<div class="label">
+						Start Date
+					</div>
+				</div>
+				<div class="row">
+					<div class="value">
+						<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
+					</div>
+					<div class="label">
+						End Date
+					</div>
+				</div>
+				<div class="row">
+					<div class="value">
+						<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
+					</div>
+					<div class="label">
+						Supports
+					</div>
+				</div>
+				<div class="row">
+					<div class="value">
+						<h3 class="ui header">{{.Supports}}</h3>
+					</div>
+					<div class="label">
+						Days Left
+					</div>
+				</div>
+				<div class="value">
+					{{if .Ended}}
+						<h3 class="ui header">Ended</h3>
+					{{else if .Started}}
+						{{.DaysLeft}}
+					{{else}}
+						<h3 class="ui header">Not Yet Started</h3>
+					{{end}}
+				</div>
+				{{if eq .Post.AuthorID $.User.ID}}
+				<a class="ui button" href="/project/edit/{{.PostID}}">Edit Project</a>
+				{{else}}
+				<div class="ui vertically padded grid">
+					<div class="column">
+						<a class="ui red button" {{if not (.SupportedBy $.User.ID)}} href="/project?postID={{.PostID}}&method=support" {{end}}>
+							Support{{if .SupportedBy $.User.ID}}ed{{end}}
+						</a>
+						<a class="ui teal button" {{if not (or (.AppliedBy $.User.ID) (.JoinedBy $.User.ID))}} href="/project?postID={{.PostID}}&method=apply" {{end}}>
+							{{if .JoinedBy $.User.ID}}
+							Joined
+							{{else if .AppliedBy $.User.ID}}
+							Applied
+							{{else}}
+							Apply
+							{{end}}
+						</a>
+					</div>
+				</div>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<div class="ui bottom attached tab" data-tab="comments">
+		<div class="ui comments">
+			<h3 class="ui dividing header">Comments</h3>
+			{{range .Post.Comments}}
+			<div class="comment">
+				<a class="avatar">
+					{{with .Author.AvatarURL}}
+					<img src="{{.}}">
+					{{else}}
+					<img src="/img/large/avatar-thumb.png">
+					{{end}}
+				</a>
+				<div class="content">
+					<a class="author" href="/profile/{{.Author.ID}}">{{.Author.Nicename}}</a>
+					<div class="metadata">
+						<span class="date">{{.CreatedAt.Format "02 Jan, 2006 15:04"}}</span>
+					</div>
+					<div class="text">
+						{{.Text}}
+					</div>
+				</div>
+			</div>
+			{{end}}
+			<form class="ui reply form" action="/post/comment" method="POST">
+				<div class="field">
+					<textarea name="text"></textarea>
+				</div>
+				<input type="hidden" name="projectID" value="{{.PostID}}">
+				<button class="ui blue labeled submit icon button">
+					<i class="icon edit"></i> Add Reply
+				</button>
+			</form>
+		</div>
+	</div>
+	{{end}}
+{{end}}

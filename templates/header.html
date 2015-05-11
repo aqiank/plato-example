@@ -13,9 +13,9 @@
 
 </head>
 
-<div id="header" class="ui page grid">
-	<div class="column">
-		<nav id="nav" class="ui secondary pointing menu">
+<div id="header">
+	<nav id="nav" class="ui secondary pointing menu page grid">
+		<div class="column">
 			<a class="item" href="/">BBH OI</a>
 			{{if .IsLoggedIn}}
 			<a class="item" href="/project/new">
@@ -44,7 +44,7 @@
 			</div>
 			{{end}}
 		</div>
-	</div>
+	</nav>
 </div>
 
 <body>

@@ -40,6 +40,10 @@ const (
 
 	recommendedProjectsSQL = `SELECT * FROM project WHERE recommended = 1`
 
+	projectMembersSQL = `SELECT ` + db.Prefix + `user.* FROM ` + db.Prefix + `user INNER JOIN ` + db.Prefix + `post_meta
+			     ON ` + db.Prefix + `user.id = ` + db.Prefix + `post_meta.value
+			     WHERE ` + db.Prefix + `post_meta.key = "join" AND ` + db.Prefix + `post_meta.post_id = ?`
+
 	// profession
 	createProfessionTableSQL = `post_id INTEGER NOT NULL,
 				    name TEXT NOT NULL,
@@ -98,6 +102,10 @@ func (p Project) Ended() bool {
 	return time.Since(p.EndDate) >= 0
 }
 
+func (p Project) Members() []entity.User {
+	return db.QueryUsers(projectMembersSQL, p.PostID)
+}
+
 func (p Project) Professions() []Profession {
 	var ps []Profession
 
@@ -125,6 +133,10 @@ func (p Project) Professions() []Profession {
 	return ps
 }
 
+func (p Project) ProfessionPercentage(name string) int {
+	return 74
+}
+
 func (p Project) SupportedBy(userID int64) bool {
 	return supportedProject(p.PostID, userID)
 }
@@ -135,6 +147,11 @@ func (p Project) AppliedBy(userID int64) bool {
 
 func (p Project) JoinedBy(userID int64) bool {
 	return joinedProject(p.PostID, userID)
+}
+
+func (p Project) Supports() int64 {
+	count, _ := db.MetaCount("post", p.PostID, "support")
+	return count
 }
 
 func insertProject(postID int64, tagline, status, imageURL string, startTime, endTime time.Time) (int64, error) {
@@ -285,7 +302,6 @@ func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error)
 		http.Redirect(w, r, "/project/"+postIDStr, 302)
 		return postID, nil
 	case "apply":
-		println("Test")
 		applyProject(postID, user.ID())
 		http.Redirect(w, r, "/project/"+postIDStr, 302)
 		return postID, nil
@@ -324,6 +340,7 @@ func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error)
 		if err = insertProfession(id, r); err != nil {
 			return nil, debug.Error(err)
 		}
+		joinProject(postID, strconv.FormatInt(user.ID(), 10))
 		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/", postID), 302)
 	case "PUT":
 		if err = updateProject(postID, tagline, status, imageURL, startDate, endDate); err != nil {

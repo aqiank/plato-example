@@ -3,7 +3,7 @@
         background-size: cover;
         background-position: center;
         width: 100%;
-        height: 600px;
+        height: 500px;
 }
 
 /* Front Cover */
@@ -19,6 +19,6 @@
 
 /* Recommended Projects */
 #oi-recommended-projects .header { color: #f3f3f3; }
-#oi-recommended-projects .background { width: 100%; height: 600px; background-size: cover; background-position: center; }
+#oi-recommended-projects .background { width: 100%; height: 500px; background-size: cover; background-position: center; }
 
 #oi-trending-projects, #oi-active-projects { background: #fffeee }

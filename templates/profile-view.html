@@ -1,0 +1,100 @@
+{{define "profile-view"}}
+        {{template "header" .}}
+
+	<div class="ui vertical padded page grid">
+		<div class="row">
+			<div class="ui segment column grid">
+				<h3 class="ui header">Profile</h3>
+				<div class="twelve wide column">
+					<div class="ui items">
+						<div class="item">
+							<label class="image">
+								{{with .OtherUser.AvatarURL}}
+								<img src="{{.}}">
+								{{else}}
+								<img src="/img/large/avatar.png">
+								{{end}}
+								<div class="ui vertically padded grid">
+									<div class="row">
+										<div class="column">
+											{{template "modal-message" .}}
+											<a class="ui button message"><i class="mail icon"></i> Send a Message</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="column">
+											{{if not (eq .User.ID .OtherUser.ID)}}
+											{{if .User.Following .OtherUser}}
+											<a href="/unfollow?userID={{.OtherUser.ID}}" class="ui vertically padded red button">Unfollow</a>
+											{{else}}
+											<a href="/follow?userID={{.OtherUser.ID}}" class="ui vertically padded blue button">Follow</a>
+											{{end}}
+											{{end}}
+										</div>
+									</div>
+								</div>
+							</label>
+							<div class="content">
+								<h1 id="fullname" class="ui header">{{.OtherUser.Nicename}}</h1>
+								<div class="meta">
+									<span id="profession" class="date">{{.OtherUser.Profession}}</span>
+								</div>
+								<div id="description" class="description">{{.HTML .OtherUser.Description}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="three wide column">
+					<div class="ui statistics">
+						<div class="ui vertically padded statistics grid">
+							<div class="value">
+								<h2><i class="user icon"></i> {{len .OtherUser.Followers}}</h2>
+							</div>
+							<div class="label">
+								<h2>Followers</h2>
+							</div>
+						</div>
+						<div class="ui vertically padded statistics grid">
+							<div class="value">
+								<h2><i class="user icon"></i> {{len .OtherUser.Followeds}}</h2>
+							</div>
+							<div class="label">
+								<h2>Following</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="ui segment column">
+				<h3 class="ui header">Involved Projects</h3>
+				<div class="ui cards">
+				{{range call .RecommendedProjects}}
+					<div class="card">
+						<a class="image" href="/project/{{.PostID}}">
+							{{with .ImageURL}}
+							<img src="{{.}}">
+							{{else}}
+							<img src="/img/dummies/project.png">
+							{{end}}
+						</a>
+						<div class="content">
+							<a class="header" href="/project/{{.PostID}}">{{.Title}}</a>
+							<div class="meta">
+								Project
+							</div>
+							<div class="description">
+								{{.ShortContent 140}}
+							</div>
+						</div>
+					</div>
+				{{end}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+        {{template "sidebar" .}}
+        {{template "footer" .}}
+{{end}}

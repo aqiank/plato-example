@@ -2,10 +2,61 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
+	"plato/db"
+	"plato/debug"
 	"plato/server"
 	"plato/server/session"
 )
+
+const (
+	getApplicantsSQL = `SELECT project.id, ` + db.Prefix + `post_meta.value FROM project
+			    INNER JOIN ` + db.Prefix + `post
+			    ON project.post_id = post.id
+			    INNER JOIN ` + db.Prefix + `post_meta
+			    ON post_meta.post_id = post.id
+			    WHERE post.author_id = ?`
+
+)
+
+type Applicant struct {
+	PostID int64
+	UserID int64
+}
+
+func getApplicants(authorID int64) []Applicant {
+	var as []Applicant
+
+	rows, err := db.Query(getApplicantsSQL, authorID)
+	if err != nil {
+		debug.Warn(err)
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var a Applicant
+		var userIDStr string
+
+		if err = rows.Scan(
+			&a.PostID,
+			&userIDStr,
+		); err != nil {
+			debug.Warn(err)
+			return nil
+		}
+
+		if a.UserID, err = strconv.ParseInt(userIDStr, 10, 0); err != nil {
+			debug.Warn(err)
+			return nil
+		}
+
+		as = append(as, a)
+	}
+
+	return as
+}
 
 func dashboardPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	user := session.User(r)

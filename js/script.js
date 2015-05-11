@@ -20,6 +20,19 @@ var SignInRules =
         },
 };
 
+var MessageRules =
+{
+        text: {
+                identifier: "message-text",
+                rules: [
+                        {
+                                type: "empty",
+                                prompt: "Please enter a message"
+                        }
+                ]
+        }
+};
+
 $(document).ready(function() {
         $("#form-sign-up")
 		.form(SignInRules)
@@ -31,9 +44,14 @@ $(document).ready(function() {
 		.modal({duration: 300})
                 .modal("attach events", ".sign-in");
 
+        $("#form-message")
+		.form(MessageRules)
+		.modal({duration: 300})
+                .modal("attach events", ".message");
+
         $(".dropdown").dropdown();
 
-        // handle range input labels
+        // range input labels
         $(".range-wrapper").each(function(idx, el) {
                 var input = $(el).children("input");
                 var label = $(el).children("label");
@@ -42,11 +60,17 @@ $(document).ready(function() {
                 });
         });
 
-        // handle datepickers
+        // datepickers
         $(".datepicker").pickadate();
 
-	// handle tabs
+	// tabs
 	$(".menu .item").tab();
+
+	// progress
+	$(".progress").progress();
+
+	// parallax
+	$(".parallax").parallax();
 });
 
 function setImageInputPreview(input, preview, uploadURL, success) {

@@ -1,0 +1,38 @@
+{{define "project_tab_content_comments"}}
+	{{with .Project}}
+	<div class="ui bottom attached tab" data-tab="comments">
+		<div class="ui comments">
+			<h3 class="ui dividing header">Comments</h3>
+			{{range .Post.Comments}}
+			<div class="comment">
+				<a class="avatar">
+					{{with .Author.AvatarURL}}
+					<img src="{{.}}">
+					{{else}}
+					<img src="/img/large/avatar-thumb.png">
+					{{end}}
+				</a>
+				<div class="content">
+					<a class="author" href="/profile/{{.Author.ID}}">{{.Author.Nicename}}</a>
+					<div class="metadata">
+						<span class="date">{{.CreatedAt.Format "02 Jan, 2006 15:04"}}</span>
+					</div>
+					<div class="text">
+						{{.Text}}
+					</div>
+				</div>
+			</div>
+			{{end}}
+			<form class="ui reply form" action="/post/comment" method="POST">
+				<div class="field">
+					<textarea name="text"></textarea>
+				</div>
+				<input type="hidden" name="projectID" value="{{.PostID}}">
+				<button class="ui blue labeled submit icon button">
+					<i class="icon edit"></i> Add Reply
+				</button>
+			</form>
+		</div>
+	</div>
+	{{end}}
+{{end}}
