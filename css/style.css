@@ -1,10 +1,10 @@
-#nav { background: #f03030 }
-#nav .header { color: #f0f0f0; font-weight: bold; }
-#nav .item { color: #f0f0f0; font-weight: bold; }
-#nav i { color: #f0f0f0; font-weight: bold; }
-#nav input::-webkit-input-placeholder { color: #f0f0f0; font-weight: bold; }
-#nav input::-moz-placeholder { color: #f0f0f0; font-weight: bold; }
-#nav input::-ms-input-placeholder { color: #f0f0f0; font-weight: bold; }
+#header { background: #f03030; }
+#nav .header { color: #ffffff; font-weight: bold; }
+#nav .item { color: #ffffff; font-weight: bold; }
+#nav i { color: #ffffff; font-weight: bold; }
+#nav input::-webkit-input-placeholder { color: #ffffff; font-weight: bold; }
+#nav input::-moz-placeholder { color: #ffffff; font-weight: bold; }
+#nav input::-ms-input-placeholder { color: #ffffff; font-weight: bold; }
 
 .pt-img-input { display: none; }
 .pt-img-preview { cursor: pointer; clear: both; }
