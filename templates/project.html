@@ -1,17 +1,27 @@
 {{define "project"}}
         {{.Include `<script src="/js/script-project.js"></script>`}}
         {{template "header" .}}
+
+	{{with .Project.ImageURL}}
+	<div class="parallax-window pt-valign-wrapper" data-parallax="scroll" data-image-src="{{.}}">
+	{{else}}
+	<div class="parallax-window pt-valign-wrapper" data-parallax="scroll" data-image-src="/img/dummies/project.png">
+	{{end}}
+		<div class="pt-valign pt-text-center">
+			<h1 class="ui header">{{.Project.Title}}</h1>
+		</div>
+	</div>
+
 	<div class="ui vertical padded page grid">
 		<div class="column">
 			<div class="ui top attached tabular menu">
-				<div class="active item" data-tab="info">Info</div>
-				<div class="item" data-tab="comments">Comments</div>
+				<a class="active item" data-tab="info">Info</a>
+				<a class="item" data-tab="comments">Comments</a>
 			</div>
 			{{template "project_tab_content_info" .}}
 			{{template "project_tab_content_comments" .}}
 		</div>
 	</div>
 
-        {{template "sidebar" .}}
         {{template "footer" .}}
 {{end}}

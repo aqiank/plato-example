@@ -55,6 +55,8 @@ const (
 	updateProfessionSQL = `UPDATE profession SET count = ? WHERE post_id = ? AND name = ?`
 
 	getProfessionSQL = `SELECT * FROM profession WHERE post_id = ?`
+
+	neededProfessionSQL = `SELECT count FROM profession WHERE post_id = ? AND name = ?`
 )
 
 type Project struct {
@@ -65,6 +67,7 @@ type Project struct {
 	Recommended bool
 	StartDate time.Time
 	EndDate time.Time
+	members []entity.User
 }
 
 type Profession struct {
@@ -103,7 +106,38 @@ func (p Project) Ended() bool {
 }
 
 func (p Project) Members() []entity.User {
-	return db.QueryUsers(projectMembersSQL, p.PostID)
+	if p.members == nil {
+		p.members = db.QueryUsers(projectMembersSQL, p.PostID)
+	}
+	return p.members
+}
+
+func (p Project) FilledProfession(profession string) int64 {
+	var count int64
+
+	if p.members == nil {
+		p.Members()
+	}
+
+	for _, member := range p.members {
+		if member.Profession() == profession {
+			count++
+		}
+	}
+
+	return count
+}
+
+func (p Project) NeededProfession(profession string) int64 {
+	var count int64
+	if err := db.QueryRow(neededProfessionSQL, p.PostID, profession).Scan(&count); err != nil {
+		return 0
+	}
+	return count
+}
+
+func (p Project) ProfessionProgress(profession string) int64 {
+	return p.FilledProfession(profession) * 100 / p.NeededProfession(profession)
 }
 
 func (p Project) Professions() []Profession {
@@ -131,10 +165,6 @@ func (p Project) Professions() []Profession {
 	}
 
 	return ps
-}
-
-func (p Project) ProfessionPercentage(name string) int {
-	return 74
 }
 
 func (p Project) SupportedBy(userID int64) bool {

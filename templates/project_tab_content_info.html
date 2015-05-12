@@ -5,7 +5,6 @@
 			<div class="twelve wide column">
 				<div class="ui vertically padded grid">
 					<div class="column">
-						<h4 class="ui header">Info</h4>
 						<h1>{{.Title}}</h1>
 						<p>{{$.HTML .Content}}</h1>
 					</div>
@@ -16,9 +15,9 @@
 						<div class="ui two columns grid">
 							{{range .Professions}}
 							<div class="column">
-								<div class="ui teal progress" data-percent="74">
+								<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
 									<div class="bar"></div>
-									<div class="label"></div>
+									<div class="label">{{.Name}}</div>
 								</div>
 							</div>
 							{{end}}
@@ -28,9 +27,25 @@
 				<div class="ui vertically padded grid">
 					<div class="column">
 						<h4 class="ui header">Members</h4>
+						<div class="ui items">
 						{{range .Members}}
-						<p>{{.Nicename}}</p>
+							<div class="item">
+								<a class="ui tiny image">
+								{{with .AvatarURL}}
+									<img src="{{.}}">
+								{{else}}
+									<img src="/img/large/avatar-thumb.png">
+								{{end}}
+								</a>
+								<div class="content">
+									<a class="header">{{.Nicename}}</a>
+									<div class="description">
+										{{.ShortDescription 140}}
+									</div>
+								</div>
+							</div>
 						{{end}}
+						</div>
 					</div>
 				</div>
 			</div>
