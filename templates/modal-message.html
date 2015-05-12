@@ -1,0 +1,18 @@
+{{define "modal-message"}}
+        <form class="ui modal" id="form-message" action="/message" method="POST">
+		<i class="close icon"></i>
+		<div class="header">Message</div>
+		<div class="content">
+			<div class="ui form">
+				<p class="ui header">Send a message to {{.OtherUser.Nicename}}</p>
+				<div class="field">
+					<textarea id="message-text" name="text"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui black button">Cancel</div>
+			<button type="submit" class="ui positive right labeled icon submit button">Send</button>
+		</div>
+	</form>
+{{end}}
