@@ -76,13 +76,14 @@
 								</div>
 							</div>
 						</div>
+						{{range .Activities}}
 						<div class="event">
 							<div class="label">
 								<i class="pencil icon"></i>
 							</div>
 							<div class="content">
 								<div class="summary">
-									You submitted a new post to the page
+									You commented on the project <a href="/project/{{.SourceID}}">
 									<div class="date">
 										3 days ago
 									</div>
@@ -187,7 +188,7 @@
 				<div class="sixteen wide column">
 					<h4 class="ui header">New Projects</h4>
 					<div class="ui cards">
-					{{range call .RecommendedProjects}}
+					{{range call .LatestRelatedProjects $.User.Profession 3}}
 						<div class="card">
 							<a class="image" href="/project/{{.PostID}}">
 								{{with .ImageURL}}

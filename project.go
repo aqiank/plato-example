@@ -38,7 +38,15 @@ const (
 
 	getProjectSQL = `SELECT * FROM project WHERE post_id = ?`
 
-	recommendedProjectsSQL = `SELECT * FROM project WHERE recommended = 1`
+	recommendedProjectsSQL = `SELECT project.* FROM project
+				  INNER JOIN ` + db.Prefix + `post ON project.post_id = ` + db.Prefix + `post.id
+				  WHERE recommended = 1 ORDER BY datetime(created_at) DESC LIMIT ?`
+
+	latestRelatedProjectsSQL = `SELECT project.* FROM project
+				    INNER JOIN profession ON project.post_id = profession.post_id
+				    INNER JOIN ` + db.Prefix + `post ON project.post_id = ` + db.Prefix + `post.id
+				    WHERE profession.name = ?
+				    ORDER BY datetime(` + db.Prefix + `post.created_at) DESC LIMIT ?`
 
 	projectMembersSQL = `SELECT ` + db.Prefix + `user.* FROM ` + db.Prefix + `user INNER JOIN ` + db.Prefix + `post_meta
 			     ON ` + db.Prefix + `user.id = ` + db.Prefix + `post_meta.value
@@ -239,8 +247,12 @@ func init() {
 	}
 }
 
-func recommendedProjects() []Project {
-	return queryProject(recommendedProjectsSQL)
+func recommendedProjects(n int) []Project {
+	return queryProject(recommendedProjectsSQL, n)
+}
+
+func latestRelatedProjects(profession string, n int) []Project {
+	return queryProject(latestRelatedProjectsSQL, profession, n)
 }
 
 func queryProject(q string, data ...interface{}) []Project {
@@ -249,7 +261,7 @@ func queryProject(q string, data ...interface{}) []Project {
 	var err error
 
 	if data != nil {
-		rows, err = db.Query(q, data)
+		rows, err = db.Query(q, data...)
 	} else {
 		rows, err = db.Query(q)
 	}

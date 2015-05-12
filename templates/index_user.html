@@ -1,7 +1,7 @@
 {{define "index_user"}}
 
 	<div id="oi-recommended-projects">
-		{{range call .RecommendedProjects}}
+		{{range call .RecommendedProjects 3}}
 		<div class="background" style="background-image: url({{.ImageURL}})">
 			<div class="ui page grid pt-full-height" style="background: rgba(0,0,0,0.4); margin: 0">
 				<div class="column pt-full-height">
@@ -22,7 +22,7 @@
 		<div class="column">
 			<h3 class="ui header">Trending Projects</h3>
 			<div class="ui cards">
-			{{range call .RecommendedProjects}}
+			{{range call .RecommendedProjects 3}}
 				<div class="card">
 					<a class="image" href="/project/{{.PostID}}">
 						{{with .ImageURL}}
@@ -53,7 +53,7 @@
 		<div class="column">
 			<h3 class="ui header">Most Active Projects</h3>
 			<div class="ui cards">
-			{{range call .RecommendedProjects}}
+			{{range call .RecommendedProjects 3}}
 				<div class="card">
 					<a class="image" href="/project/{{.PostID}}">
 						{{with .ImageURL}}

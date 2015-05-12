@@ -70,7 +70,7 @@
 			<div class="ui segment column">
 				<h3 class="ui header">Involved Projects</h3>
 				<div class="ui cards">
-				{{range call .RecommendedProjects}}
+				{{range call .RecommendedProjects 3}}
 					<div class="card">
 						<a class="image" href="/project/{{.PostID}}">
 							{{with .ImageURL}}
