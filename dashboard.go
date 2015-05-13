@@ -6,23 +6,28 @@ import (
 
 	"plato/db"
 	"plato/debug"
+	"plato/entity"
 	"plato/server"
 	"plato/server/session"
 )
 
 const (
-	getApplicantsSQL = `SELECT project.id, pt_post_meta.value FROM project
+	getApplicantsSQL = `SELECT project.post_id, pt_post_meta.value FROM project
 			    INNER JOIN pt_post
-			    ON project.post_id = post.id
+			    ON project.post_id = pt_post.id
 			    INNER JOIN pt_post_meta
-			    ON post_meta.post_id = post.id
-			    WHERE post.author_id = ?`
+			    ON pt_post_meta.post_id = pt_post.id
+			    WHERE pt_post.author_id = ? AND pt_post_meta.key = "apply"`
 
 )
 
 type Applicant struct {
 	PostID int64
 	UserID int64
+}
+
+func (a Applicant) User() entity.User {
+	return db.GetUser(a.UserID)
 }
 
 func getApplicants(authorID int64) []Applicant {

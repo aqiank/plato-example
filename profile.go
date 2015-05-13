@@ -43,14 +43,15 @@ func viewProfilePageHandler(w http.ResponseWriter, r *http.Request) (interface{}
 	}
 
 	base := path.Base(r.URL.Path[1:])
-	id, err := strconv.ParseInt(base, 10, 0)
+	userID, err := strconv.ParseInt(base, 10, 0)
 	if err != nil {
 		return nil, debug.Error(err)
 	}
 
-	otherUser, err := db.GetUser("id", id)
-	if err != nil {
-		return nil, debug.Error(err)
+	otherUser := db.GetUser(userID)
+	if otherUser == nil {
+		http.Redirect(w, r, "/", 302)
+		return nil, nil
 	}
 
 	return nil, server.ServePage(w, r, "profile-view", service.Service{"OtherUser": otherUser})

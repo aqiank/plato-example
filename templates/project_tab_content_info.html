@@ -17,7 +17,7 @@
 							<div class="column">
 								<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
 									<div class="bar"></div>
-									<div class="label">{{.Name}}</div>
+									<div class="label">{{$.Project.FilledProfession .Name}} / {{$.Project.NeededProfession .Name}} {{.Name}}</div>
 								</div>
 							</div>
 							{{end}}
@@ -30,17 +30,11 @@
 						<div class="ui items">
 						{{range .Members}}
 							<div class="item">
-								<a class="ui tiny image">
-								{{with .AvatarURL}}
-									<img src="{{.}}">
-								{{else}}
-									<img src="/img/large/avatar-thumb.png">
-								{{end}}
-								</a>
+								<a class="ui tiny image"><img src="{{.AvatarURL}}"></a>
 								<div class="content">
 									<a class="header">{{.Nicename}}</a>
 									<div class="description">
-										{{.ShortDescription 140}}
+										{{.ShortDescription 140}}...
 									</div>
 								</div>
 							</div>
@@ -49,37 +43,28 @@
 					</div>
 				</div>
 			</div>
-			<div class="four wide column">
+			<div id="project-sidebar" class="four wide column">
 				<div class="row">
 					<div class="label">
 						Start Date
 					</div>
-				</div>
-				<div class="row">
 					<div class="value">
 						<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
 					</div>
+				</div>
+				<div class="row">
 					<div class="label">
 						End Date
 					</div>
-				</div>
-				<div class="row">
 					<div class="value">
 						<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
 					</div>
-					<div class="label">
-						Supports
-					</div>
 				</div>
 				<div class="row">
-					<div class="value">
-						<h3 class="ui header">{{.Supports}}</h3>
-					</div>
 					<div class="label">
-						Days Left
+						DaysLeft
 					</div>
-				</div>
-				<div class="value">
+					<div class="value">
 					{{if .Ended}}
 						<h3 class="ui header">Ended</h3>
 					{{else if .Started}}
@@ -87,6 +72,15 @@
 					{{else}}
 						<h3 class="ui header">Not Yet Started</h3>
 					{{end}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="label">
+						Supports
+					</div>
+					<div class="value">
+						<h3 class="ui header">{{.Supports}}</h3>
+					</div>
 				</div>
 				{{if eq .Post.AuthorID $.User.ID}}
 				<a class="ui button" href="/project/edit/{{.PostID}}">Edit Project</a>

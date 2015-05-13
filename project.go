@@ -182,6 +182,7 @@ func (p project) FilledProfession(profession string) int64 {
 	}
 
 	for _, member := range p.members {
+		println(member.Profession() == profession)
 		if member.Profession() == profession {
 			count++
 		}
