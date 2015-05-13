@@ -111,8 +111,7 @@ type Profession struct {
 }
 
 func (p project) Post() entity.Post {
-	post, _ := db.GetPost(p.postID)
-	return post
+	return db.GetPost(p.postID)
 }
 
 func (p project) Title() string {
@@ -193,7 +192,8 @@ func (p project) FilledProfession(profession string) int64 {
 
 func (p project) NeededProfession(profession string) int64 {
 	var count int64
-	if err := db.QueryRow(neededProfessionSQL, p.PostID, profession).Scan(&count); err != nil {
+	if err := db.QueryRow(neededProfessionSQL, p.postID, profession).Scan(&count); err != nil {
+		debug.Warn(err)
 		return 0
 	}
 	return count

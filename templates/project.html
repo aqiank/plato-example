@@ -9,7 +9,7 @@
 	<div class="parallax-window pt-valign-wrapper" data-parallax="scroll" data-image-src="/img/dummies/project.png">
 	{{end}}
 		<div class="pt-valign pt-text-center">
-			<h1 class="ui header">{{.Project.Title}}</h1>
+			<h1 id="project-title" class="ui header">{{.Project.Title}}</h1>
 		</div>
 	</div>
 
@@ -23,6 +23,18 @@
 			{{template "project_tab_content_comments" .}}
 		</div>
 	</div>
+
+	<script>
+		$(document).ready(function() {
+			$("#project-title").empty().typed({
+				strings: ["{{.Project.Title}}", "{{.Project.Tagline}}"],
+				typeSpeed: 0,
+				startDelay: 1000,
+				backDelay: 5000,
+				loop: true
+			});
+		});
+	</script>
 
         {{template "footer" .}}
 {{end}}

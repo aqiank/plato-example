@@ -1,34 +1,37 @@
 $(document).ready(function() {
-        $("#oi-quotes").slick({
-        	dots: false,
-        	arrows: false,
-        	infinite: true,
-        	slidesToShow: 1,
-        	adaptiveHeight: true,
-        	autoplay: true,
-        	autoplaySpeed: 10000,
-        	fade: true,
-        	cssEase: "linear",
+        $("#oi-quotes").owlCarousel({
+		singleItem: true,
+		autoPlay: 10000,
+		pagination: false
         });
 
-	$("#oi-recommended-projects").slick({
-        	dots: false,
-        	arrows: false,
-        	infinite: true,
-        	slidesToShow: 1,
-        	adaptiveHeight: true,
-        	autoplay: true,
-        	autoplaySpeed: 5000,
-        	fade: true,
-        	cssEase: "linear",
+	$("#oi-recommended-projects").owlCarousel({
+		singleItem: true,
+		autoPlay: 10000
 	});
+
+	$(".owl-carousel").owlCarousel();
 
 	$(".google.plus.button").click(function() {
 		// signInCallback defined in step 6.
 		auth2.grantOfflineAccess({"redirect_uri": "postmessage"}).then(signInCallback);
 	});
+
+	$(".facebook.button").click(function() {
+		FB.login(function(response) {
+			console.log(response);
+			$.post("/login",
+				{accessToken: response.accessToken},
+				function(resp) {
+					window.location = "/";
+				}
+			);
+		}, {scope: "public_profile,email"});
+	});
 });
 
+
+// Google Sign In callback
 function signInCallback(authResult) {
 	console.log("Result: " + authResult);
 	if (authResult["code"]) {

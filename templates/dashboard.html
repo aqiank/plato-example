@@ -7,80 +7,6 @@
 			<div class="ui segment column grid">
 				<h3 class="ui header">Dashboard</h3>
 				<div class="sixteen wide column">
-					<h4 class="ui header">Applicants</h4>
-					<div class="ui cards">
-						{{range call .GetApplicants .User.ID}}
-						<div class="card">
-							<a class="image">
-								<img src="{{.User.AvatarURL}}">
-							</a>
-							<div class="content">
-								<a class="header">{{.User.Nicename}}</a>
-								<div class="meta">
-									<a>Friends</a>
-								</div>
-								<div class="description">
-									{{.User.ShortDescription 140}}
-								</div>
-							</div>
-						</div>
-						{{else}}
-						No applicants!
-						{{end}}
-					</div>
-				</div>
-				<div class="sixteen wide column">
-					<h4 class="ui header">Activities</h4>
-					<div class="ui feed">
-						{{range .GetActivities .User.ID}}
-						{{if eq .Type "comment"}}
-						<div class="event">
-							<div class="label">
-								<img src="{{.User.AvatarURL}}">
-							</div>
-							<div class="content">
-								<div class="summary">
-									<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> commented on the project <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
-									<div class="date">{{$.NiceTime .CreatedAt}}</div>
-								</div>
-								<div class="extra text">
-									I'm having a BBQ this weekend. Come by around 4pm if you can.
-								</div>
-								<div class="meta">
-									<a class="like">
-										<i class="like icon"></i> 11 Likes
-									</a>
-								</div>
-							</div>
-						</div>
-						{{else if eq .Type "create project"}}
-						<div class="event">
-							<div class="label">
-								<img src="{{.User.AvatarURL}}">
-							</div>
-							<div class="content">
-								<div class="summary">
-									<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> created a project called <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
-									<div class="date">{{$.NiceTime .CreatedAt}}</div>
-								</div>
-								<div class="extra images">
-									{{$project := call $.GetProject .SourceID}}
-									<a><img src="{{$project.ImageURL}}"></a>
-								</div>
-								<div class="meta">
-									<a class="like">
-										<i class="like icon"></i> 1 Like
-									</a>
-								</div>
-							</div>
-						</div>
-						{{end}}
-						{{else}}
-						No activites!
-						{{end}}
-					</div>
-				</div>
-				<div class="sixteen wide column">
 					<h4 class="ui header">New Projects</h4>
 					<div class="ui cards">
 					{{range call .LatestRelatedProjects $.User.Profession 3}}
@@ -103,6 +29,90 @@
 							</div>
 						</div>
 					{{end}}
+					</div>
+				</div>
+				<div class="sixteen wide column">
+					<h4 class="ui header">Activities</h4>
+					<div class="ui feed">
+						{{range .GetActivities .User.ID}}
+							{{if eq .Type "comment"}}
+							{{with $comment := $.GetComment .SourceID}}
+							<div class="event">
+								<div class="label">
+									<img src="{{.Author.AvatarURL}}">
+								</div>
+								<div class="content">
+									<div class="summary">
+										<a href="/profile/{{.AuthorID}}">
+											{{.Author.Nicename}}
+										</a> commented on the project
+										<a href="/project/{{.PostID}}">
+											{{.Post.Title}}
+										</a>
+										<div class="date">{{$.NiceTime .CreatedAt}}</div>
+									</div>
+									<div class="extra text">
+										{{$comment.Text}}
+									</div>
+									<div class="meta">
+										<a class="like">
+											<i class="like icon"></i> 11 Likes
+										</a>
+									</div>
+								</div>
+							</div>
+							{{end}}
+							{{else if eq .Type "create project"}}
+							<div class="event">
+								<div class="label">
+									<img src="{{.User.AvatarURL}}">
+								</div>
+								<div class="content">
+									<div class="summary">
+										<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> created a project called <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
+										<div class="date">{{$.NiceTime .CreatedAt}}</div>
+									</div>
+									<div class="extra images">
+										{{$project := call $.GetProject .SourceID}}
+										<a><img src="{{$project.ImageURL}}"></a>
+									</div>
+									<div class="meta">
+										<a class="like">
+											<i class="like icon"></i> 1 Like
+										</a>
+									</div>
+								</div>
+							</div>
+							{{end}}
+						{{else}}
+							No activities!
+						{{end}}
+					</div>
+				</div>
+				<div class="sixteen wide column">
+					<h4 class="ui header">Applicants</h4>
+					<div class="ui cards">
+						{{range call .GetApplicants .User.ID}}
+						<div class="card">
+							<a class="image">
+								<img src="{{.User.AvatarURL}}">
+							</a>
+							<div class="content">
+								<a class="header">{{.User.Nicename}}</a>
+								<div class="meta">
+									<a>Friends</a>
+								</div>
+								<div class="description">
+									{{.User.ShortDescription 140}}
+								</div>
+							</div>
+							<div class="extra content">
+								<a href="/profile/{{.UserID}}">View Profile</a>
+							</div>
+						</div>
+						{{else}}
+						No applicants!
+						{{end}}
 					</div>
 				</div>
 			</div>

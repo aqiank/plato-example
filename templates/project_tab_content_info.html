@@ -6,22 +6,8 @@
 				<div class="ui vertically padded grid">
 					<div class="column">
 						<h1>{{.Title}}</h1>
+						<h3>{{.Tagline}}</h3>
 						<p>{{$.HTML .Content}}</h1>
-					</div>
-				</div>
-				<div class="ui vertically padded grid">
-					<div class="column">
-						<h4 class="ui header">Requirements</h4>
-						<div class="ui two columns grid">
-							{{range .Professions}}
-							<div class="column">
-								<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
-									<div class="bar"></div>
-									<div class="label">{{$.Project.FilledProfession .Name}} / {{$.Project.NeededProfession .Name}} {{.Name}}</div>
-								</div>
-							</div>
-							{{end}}
-						</div>
 					</div>
 				</div>
 				<div class="ui vertically padded grid">
@@ -39,6 +25,21 @@
 								</div>
 							</div>
 						{{end}}
+						</div>
+					</div>
+				</div>
+				<div class="ui vertically padded grid">
+					<div class="column">
+						<h4 class="ui header">Requirements</h4>
+						<div class="ui two columns grid">
+							{{range .Professions}}
+							<div class="column">
+								<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
+									<div class="bar"></div>
+									<div class="label">{{$.Project.FilledProfession .Name}} / {{$.Project.NeededProfession .Name}} {{.Name}}</div>
+								</div>
+							</div>
+							{{end}}
 						</div>
 					</div>
 				</div>

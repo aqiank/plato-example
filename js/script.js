@@ -71,6 +71,12 @@ $(document).ready(function() {
 
 	// parallax
 	$(".parallax").parallax();
+
+	// owl carousel
+	$(".owl-carousel").owlCarousel({
+		items: 3,
+		autoHeight: true
+	});
 });
 
 function setImageInputPreview(input, preview, uploadURL, success) {

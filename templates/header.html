@@ -16,16 +16,17 @@
 <div id="header">
 	<nav id="nav" class="ui secondary pointing menu page grid">
 		<div class="column">
-			<a class="item" href="/">BBH OI</a>
+			<a class="item" href="/"><h1 class="ui header">O\I</h1></a>
 			{{if .IsLoggedIn}}
-			<a class="item" href="/project/new">
-				<i class="plus icon"></i> Create
+			<a class="item" href="/profile">
+				<span><img class="ui avatar image" src="{{.User.AvatarURL}}"></span>
+				Profile
 			</a>
 			<a class="item" href="/dashboard">
 				<i class="dashboard icon"></i> Dashboard
 			</a>
-			<a class="item" href="/profile">
-				<i class="user icon"></i> Profile
+			<a class="item" href="/project/new">
+				<i class="plus icon"></i> Create
 			</a>
 			<div class="right menu">
 				<div class="item">

@@ -21,32 +21,17 @@
 	<div id="oi-trending-projects" class="ui page vertical padded grid">
 		<div class="column">
 			<h3 class="ui header">Trending Projects</h3>
-			<div class="ui three column grid">
-			{{range call .RecommendedProjects 3}}
-				<div class="column">
-					<div class="ui fluid card">
-						<a class="image" href="/project/{{.PostID}}">
-							{{with .ImageURL}}
-							<img src="{{.}}">
-							{{else}}
-							<img src="/img/dummies/project.png">
-							{{end}}
-						</a>
-						<div class="content">
-							<a class="header">{{.Title}}</a>
-							<div class="meta">
-								Project
-							</div>
-							<div class="description">
-								{{.ShortContent 140}}
-							</div>
-						</div>
-						<div class="extra content">
-							<a href="/project/{{.PostID}}">View Project</a>
-						</div>
-					</div>
+			<div class="ui centered grid">
+				<div class="three column tablet computer only row">
+				{{range call .RecommendedProjects 6}}
+					{{template "project-card" .}}
+				{{end}}
 				</div>
-			{{end}}
+				<div class="one column mobile only row">
+				{{range call .RecommendedProjects 6}}
+					{{template "project-card" .}}
+				{{end}}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -54,33 +39,20 @@
 	<div id="oi-active-projects" class="ui page vertical padded grid">
 		<div class="column">
 			<h3 class="ui header">Most Active Projects</h3>
-			<div class="ui three column grid">
-			{{range call .RecommendedProjects 3}}
-				<div class="column">
-					<div class="ui fluid card">
-						<a class="image" href="/project/{{.PostID}}">
-							{{with .ImageURL}}
-							<img src="{{.}}">
-							{{else}}
-							<img src="/img/dummies/project.png">
-							{{end}}
-						</a>
-						<div class="content">
-							<a class="header">{{.Title}}</a>
-							<div class="meta">
-								Project
-							</div>
-							<div class="description">
-								{{.ShortContent 140}}
-							</div>
-						</div>
-						<div class="extra content">
-							<a href="/project/{{.PostID}}">View Project</a>
-						</div>
-					</div>
+			<div class="ui centered grid">
+				<div class="three column tablet computer only row">
+				{{range call .RecommendedProjects 6}}
+					{{template "project-card" .}}
+				{{end}}
 				</div>
-			{{end}}
+				<div class="one column mobile only row">
+				{{range call .RecommendedProjects 6}}
+					{{template "project-card" .}}
+				{{end}}
+				</div>
 			</div>
 		</div>
 	</div>
+	<div id="status"></div>
+</div>
 {{end}}
