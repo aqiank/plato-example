@@ -11,10 +11,10 @@ import (
 )
 
 const (
-	getApplicantsSQL = `SELECT project.id, ` + db.Prefix + `post_meta.value FROM project
-			    INNER JOIN ` + db.Prefix + `post
+	getApplicantsSQL = `SELECT project.id, pt_post_meta.value FROM project
+			    INNER JOIN pt_post
 			    ON project.post_id = post.id
-			    INNER JOIN ` + db.Prefix + `post_meta
+			    INNER JOIN pt_post_meta
 			    ON post_meta.post_id = post.id
 			    WHERE post.author_id = ?`
 

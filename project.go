@@ -39,18 +39,18 @@ const (
 	getProjectSQL = `SELECT * FROM project WHERE post_id = ?`
 
 	recommendedProjectsSQL = `SELECT project.* FROM project
-				  INNER JOIN ` + db.Prefix + `post ON project.post_id = ` + db.Prefix + `post.id
+				  INNER JOIN pt_post ON project.post_id = pt_post.id
 				  WHERE recommended = 1 ORDER BY datetime(created_at) DESC LIMIT ?`
 
 	latestRelatedProjectsSQL = `SELECT project.* FROM project
 				    INNER JOIN profession ON project.post_id = profession.post_id
-				    INNER JOIN ` + db.Prefix + `post ON project.post_id = ` + db.Prefix + `post.id
+				    INNER JOIN pt_post ON project.post_id = pt_post.id
 				    WHERE profession.name = ?
-				    ORDER BY datetime(` + db.Prefix + `post.created_at) DESC LIMIT ?`
+				    ORDER BY datetime(pt_post.created_at) DESC LIMIT ?`
 
-	projectMembersSQL = `SELECT ` + db.Prefix + `user.* FROM ` + db.Prefix + `user INNER JOIN ` + db.Prefix + `post_meta
-			     ON ` + db.Prefix + `user.id = ` + db.Prefix + `post_meta.value
-			     WHERE ` + db.Prefix + `post_meta.key = "join" AND ` + db.Prefix + `post_meta.post_id = ?`
+	projectMembersSQL = `SELECT pt_user.* FROM pt_user INNER JOIN pt_post_meta
+			     ON pt_user.id = pt_post_meta.value
+			     WHERE pt_post_meta.key = "join" AND pt_post_meta.post_id = ?`
 
 	// profession
 	createProfessionTableSQL = `post_id INTEGER NOT NULL,
@@ -67,14 +67,40 @@ const (
 	neededProfessionSQL = `SELECT count FROM profession WHERE post_id = ? AND name = ?`
 )
 
-type Project struct {
-	PostID int64
-	Tagline string
-	Status string
-	ImageURL string
-	Recommended bool
-	StartDate time.Time
-	EndDate time.Time
+type Project interface {
+	Post() entity.Post
+	Title() string
+	Content() string
+	ShortContent(int) string
+	PostID() int64
+	Tagline() string
+	Status() string
+	Recommended() bool
+	StartDate() time.Time
+	EndDate() time.Time
+	ImageURL() string
+	DaysLeft() int
+	Started() bool
+	Ended() bool
+	Members() []entity.User
+	FilledProfession(string) int64
+	NeededProfession(string) int64
+	ProfessionProgress(string) int64
+	Professions() []Profession
+	SupportedBy(int64) bool
+	AppliedBy(int64) bool
+	JoinedBy(int64) bool
+	Supports() int64
+}
+
+type project struct {
+	postID int64
+	tagline string
+	status string
+	imageURL string
+	recommended bool
+	startDate time.Time
+	endDate time.Time
 	members []entity.User
 }
 
@@ -84,43 +110,71 @@ type Profession struct {
 	Count int64
 }
 
-func (p Project) Post() entity.Post {
-	post, _ := db.GetPost(p.PostID)
+func (p project) Post() entity.Post {
+	post, _ := db.GetPost(p.postID)
 	return post
 }
 
-func (p Project) Title() string {
+func (p project) Title() string {
 	return p.Post().Title()
 }
 
-func (p Project) Content() string {
+func (p project) Content() string {
 	return p.Post().Content()
 }
 
-func (p Project) ShortContent(n int) string {
+func (p project) ShortContent(n int) string {
 	return p.Post().ShortContent(n)
 }
 
-func (p Project) DaysLeft() int {
-	return int(p.EndDate.Sub(time.Now()) / time.Hour / 24)
+func (p project) ImageURL() string {
+	return p.imageURL
 }
 
-func (p Project) Started() bool {
-	return time.Since(p.StartDate) >= 0
+func (p project) PostID() int64 {
+	return p.postID
 }
 
-func (p Project) Ended() bool {
-	return time.Since(p.EndDate) >= 0
+func (p project) Tagline() string {
+	return p.tagline
 }
 
-func (p Project) Members() []entity.User {
+func (p project) Status() string {
+	return p.status
+}
+
+func (p project) Recommended() bool {
+	return p.recommended
+}
+
+func (p project) StartDate() time.Time {
+	return p.startDate
+}
+
+func (p project) EndDate() time.Time {
+	return p.endDate
+}
+
+func (p project) DaysLeft() int {
+	return int(p.endDate.Sub(time.Now()) / time.Hour / 24)
+}
+
+func (p project) Started() bool {
+	return time.Since(p.startDate) >= 0
+}
+
+func (p project) Ended() bool {
+	return time.Since(p.endDate) >= 0
+}
+
+func (p project) Members() []entity.User {
 	if p.members == nil {
-		p.members = db.QueryUsers(projectMembersSQL, p.PostID)
+		p.members = db.QueryUsers(projectMembersSQL, p.postID)
 	}
 	return p.members
 }
 
-func (p Project) FilledProfession(profession string) int64 {
+func (p project) FilledProfession(profession string) int64 {
 	var count int64
 
 	if p.members == nil {
@@ -136,7 +190,7 @@ func (p Project) FilledProfession(profession string) int64 {
 	return count
 }
 
-func (p Project) NeededProfession(profession string) int64 {
+func (p project) NeededProfession(profession string) int64 {
 	var count int64
 	if err := db.QueryRow(neededProfessionSQL, p.PostID, profession).Scan(&count); err != nil {
 		return 0
@@ -144,14 +198,19 @@ func (p Project) NeededProfession(profession string) int64 {
 	return count
 }
 
-func (p Project) ProfessionProgress(profession string) int64 {
-	return p.FilledProfession(profession) * 100 / p.NeededProfession(profession)
+func (p project) ProfessionProgress(profession string) int64 {
+	fp := p.FilledProfession(profession)
+	np := p.NeededProfession(profession)
+	if np <= 0 {
+		return 100
+	}
+	return fp * 100 / np
 }
 
-func (p Project) Professions() []Profession {
+func (p project) Professions() []Profession {
 	var ps []Profession
 
-	rows, err := db.Query(getProfessionSQL, p.PostID);
+	rows, err := db.Query(getProfessionSQL, p.postID);
 	if err != nil {
 		debug.Warn(err)
 		return nil
@@ -175,20 +234,20 @@ func (p Project) Professions() []Profession {
 	return ps
 }
 
-func (p Project) SupportedBy(userID int64) bool {
-	return supportedProject(p.PostID, userID)
+func (p project) SupportedBy(userID int64) bool {
+	return supportedProject(p.postID, userID)
 }
 
-func (p Project) AppliedBy(userID int64) bool {
-	return appliedProject(p.PostID, userID)
+func (p project) AppliedBy(userID int64) bool {
+	return appliedProject(p.postID, userID)
 }
 
-func (p Project) JoinedBy(userID int64) bool {
-	return joinedProject(p.PostID, userID)
+func (p project) JoinedBy(userID int64) bool {
+	return joinedProject(p.postID, userID)
 }
 
-func (p Project) Supports() int64 {
-	count, _ := db.MetaCount("post", p.PostID, "support")
+func (p project) Supports() int64 {
+	count, _ := db.MetaCount("post", p.postID, "support")
 	return count
 }
 
@@ -219,22 +278,23 @@ func updateProject(postID int64, tagline, status, imageURL string, startTime, en
 	return nil
 }
 
-func getProject(id int64) (Project, error) {
-	var p Project
+func getProject(id int64) Project {
+	var p project
 
 	if err := db.QueryRow(getProjectSQL, id).Scan(
-		&p.PostID,
-		&p.Tagline,
-		&p.Status,
-		&p.ImageURL,
-		&p.StartDate,
-		&p.EndDate,
-		&p.Recommended,
+		&p.postID,
+		&p.tagline,
+		&p.status,
+		&p.imageURL,
+		&p.startDate,
+		&p.endDate,
+		&p.recommended,
 	); err != nil {
-		return p, debug.Error(err)
+		debug.Warn(err)
+		return nil
 	}
 
-	return p, nil
+	return p
 }
 
 func init() {
@@ -272,16 +332,16 @@ func queryProject(q string, data ...interface{}) []Project {
 	defer rows.Close()
 
 	for rows.Next() {
-		var p Project
+		var p project
 
 		if err := rows.Scan(
-			&p.PostID,
-			&p.Tagline,
-			&p.Status,
-			&p.ImageURL,
-			&p.StartDate,
-			&p.EndDate,
-			&p.Recommended,
+			&p.postID,
+			&p.tagline,
+			&p.status,
+			&p.imageURL,
+			&p.startDate,
+			&p.endDate,
+			&p.recommended,
 		); err != nil {
 			debug.Warn(err)
 			return nil
@@ -307,24 +367,16 @@ func newProjectPageHandler(w http.ResponseWriter, r *http.Request) (interface{},
 }
 
 func projectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	var p Project
-
 	base := path.Base(r.URL.Path[1:])
 	id, err := strconv.ParseInt(base, 10, 0)
 	if err != nil {
-		goto out
+		debug.Warn(err)
+		http.Redirect(w, r, "/", 302)
+		return nil, nil
 	}
 
-	p, err = getProject(id)
-	if err != nil {
-		goto out
-	}
-
+	p := getProject(id)
 	return nil, server.ServePage(w, r, "project", service.Service{"Project": p})
-out:
-	debug.Warn(err)
-	http.Redirect(w, r, "/", 302)
-	return nil, nil
 }
 
 func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
@@ -382,6 +434,10 @@ func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error)
 		if err = insertProfession(id, r); err != nil {
 			return nil, debug.Error(err)
 		}
+		if _, err = db.InsertActivity(user.ID(), postID, "create project"); err != nil {
+			return nil, debug.Error(err)
+		}
+
 		joinProject(postID, strconv.FormatInt(user.ID(), 10))
 		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/", postID), 302)
 	case "PUT":
@@ -400,24 +456,16 @@ func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error)
 }
 
 func editProjectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	var p Project
-
 	base := path.Base(r.URL.Path[1:])
 	id, err := strconv.ParseInt(base, 10, 0)
 	if err != nil {
-		goto out
+		debug.Warn(err)
+		http.Redirect(w, r, "/", 302)
+		return nil, nil
 	}
 
-	p, err = getProject(id)
-	if err != nil {
-		goto out
-	}
-
+	p := getProject(id)
 	return nil, server.ServePage(w, r, "project-edit", service.Service{"Project": p})
-out:
-	debug.Warn(err)
-	http.Redirect(w, r, "/", 302)
-	return nil, nil
 }
 
 func insertProfession(postID int64, r *http.Request) error {

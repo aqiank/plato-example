@@ -36,6 +36,7 @@ func main() {
 		"Professions": professions,
 		"RecommendedProjects": recommendedProjects,
 		"LatestRelatedProjects": latestRelatedProjects,
+		"GetProject": getProject,
 		"GetApplicants": getApplicants,
 	})
 

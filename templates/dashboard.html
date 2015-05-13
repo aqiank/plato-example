@@ -9,84 +9,39 @@
 				<div class="sixteen wide column">
 					<h4 class="ui header">Applicants</h4>
 					<div class="ui cards">
+						{{range call .GetApplicants .User.ID}}
 						<div class="card">
 							<a class="image">
-								<img src="http://semantic-ui.com/images/avatar/large/elliot.jpg">
+								<img src="{{.AvatarURL}}">
 							</a>
 							<div class="content">
-								<a class="header">Elliot Fu</a>
+								<a class="header">{{.NiceName}}</a>
 								<div class="meta">
 									<a>Friends</a>
 								</div>
 								<div class="description">
-									Elliot Fu is a film-maker from New York.
+									{{.ShortDescription 140}}
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<a class="image">
-								<img src="http://semantic-ui.com/images/avatar/large/helen.jpg">
-							</a>
-							<div class="content">
-								<a class="header">Helen Troy</a>
-								<div class="meta">
-									<a>Friends</a>
-								</div>
-								<div class="description">
-									Helen Troy is an archivist living in New York, who enjoys cooking, fine art, and gardening.
-								</div>
-							</div>
-						</div>
-						<div class="card">
-							<a class="image">
-								<img src="http://semantic-ui.com/images/avatar/large/jenny.jpg">
-							</a>
-							<div class="content">
-								<a class="header">Jenny Hess</a>
-								<div class="meta">
-									<a>Friends</a>
-								</div>
-								<div class="description">
-									Jenny is a student studying Media Management at the New School.
-								</div>
-							</div>
-						</div>
+						{{else}}
+						No applicants!
+						{{end}}
 					</div>
 				</div>
 				<div class="sixteen wide column">
 					<h4 class="ui header">Activities</h4>
 					<div class="ui feed">
+						{{range .GetActivities .User.ID}}
+						{{if eq .Type "comment"}}
 						<div class="event">
 							<div class="label">
-								<img src="http://semantic-ui.com/images/avatar/small/elliot.jpg">
+								<img src="{{.User.AvatarURL}}">
 							</div>
 							<div class="content">
 								<div class="summary">
-									<a class="user">
-										Elliot Fu
-									</a> added you as a friend
-									<div class="date">
-										1 Hour Ago
-									</div>
-								</div>
-								<div class="meta">
-									<a class="like">
-										<i class="like icon"></i> 4 Likes
-									</a>
-								</div>
-							</div>
-						</div>
-						{{range .Activities}}
-						<div class="event">
-							<div class="label">
-								<i class="pencil icon"></i>
-							</div>
-							<div class="content">
-								<div class="summary">
-									You commented on the project <a href="/project/{{.SourceID}}">
-									<div class="date">
-										3 days ago
-									</div>
+									<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> commented on the project <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
+									<div class="date">{{$.NiceTime .CreatedAt}}</div>
 								</div>
 								<div class="extra text">
 									I'm having a BBQ this weekend. Come by around 4pm if you can.
@@ -98,20 +53,19 @@
 								</div>
 							</div>
 						</div>
+						{{else if eq .Type "create project"}}
 						<div class="event">
 							<div class="label">
-								<img src="http://semantic-ui.com/images/avatar/small/helen.jpg">
+								<img src="{{.User.AvatarURL}}">
 							</div>
 							<div class="content">
-								<div class="date">
-									4 days ago
-								</div>
 								<div class="summary">
-									<a>Helen Troy</a> added <a>2 new illustrations</a>
+									<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> created a project called <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
+									<div class="date">{{$.NiceTime .CreatedAt}}</div>
 								</div>
 								<div class="extra images">
-									<a><img src="http://semantic-ui.com/images/wireframe/image.png"></a>
-									<a><img src="http://semantic-ui.com/images/wireframe/image.png"></a>
+									{{$project := call $.GetProject .SourceID}}
+									<a><img src="{{$project.ImageURL}}"></a>
 								</div>
 								<div class="meta">
 									<a class="like">
@@ -120,69 +74,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="event">
-							<div class="label">
-								<img src="http://semantic-ui.com/images/avatar/small/jenny.jpg">
-							</div>
-							<div class="content">
-								<div class="summary">
-									<a class="user">
-										Jenny Hess
-									</a> added you as a friend
-									<div class="date">
-										2 Days Ago
-									</div>
-								</div>
-								<div class="meta">
-									<a class="like">
-										<i class="like icon"></i> 8 Likes
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="event">
-							<div class="label">
-								<img src="http://semantic-ui.com/images/avatar/small/joe.jpg">
-							</div>
-							<div class="content">
-								<div class="summary">
-									<a>Joe Henderson</a> posted on his page
-									<div class="date">
-										3 days ago
-									</div>
-								</div>
-								<div class="extra text">
-									Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even if we don't run extra laps that day, we surely will come back for more of the same another day soon.
-								</div>
-								<div class="meta">
-									<a class="like">
-										<i class="like icon"></i> 5 Likes
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="event">
-							<div class="label">
-								<img src="http://semantic-ui.com/images/avatar/small/justen.jpg">
-							</div>
-							<div class="content">
-								<div class="date">
-									4 days ago
-								</div>
-								<div class="summary">
-									<a>Justen Kitsune</a> added <a>2 new photos</a> of you
-								</div>
-								<div class="extra images">
-									<a><img src="http://semantic-ui.com/images/wireframe/image.png"></a>
-									<a><img src="http://semantic-ui.com/images/wireframe/image.png"></a>
-								</div>
-								<div class="meta">
-									<a class="like">
-										<i class="like icon"></i> 41 Likes
-									</a>
-								</div>
-							</div>
-						</div>
+						{{end}}
+						{{else}}
+						No activites!
+						{{end}}
 					</div>
 				</div>
 				<div class="sixteen wide column">
