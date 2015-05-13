@@ -20,12 +20,19 @@ $(document).ready(function() {
 	$(".facebook.button").click(function() {
 		FB.login(function(response) {
 			console.log(response);
-			$.post("/login",
-				{accessToken: response.accessToken},
-				function(resp) {
-					window.location = "/";
-				}
-			);
+			if (response.status == "connected") {
+				$.post("/login",
+					{
+						accessToken: response.authResponse.accessToken,
+						loginFrom: "facebook"
+					},
+					function(resp) {
+						window.location = "/";
+					}
+				);
+			} else {
+				console.log("Failed to sign into Facebook");
+			}
 		}, {scope: "public_profile,email"});
 	});
 });
@@ -48,5 +55,6 @@ function signInCallback(authResult) {
 		);
 	} else {
 		// There was an error.
+		console.log("Failed to sign into Google");
 	}
 }
