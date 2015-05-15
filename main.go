@@ -22,6 +22,7 @@ func main() {
 	handleProject()
 	handleDashboard()
 	handleProfile()
+	handleSearch()
 
         // Demonstrate page handler
         server.HandlePage("/", indexPageHandler)

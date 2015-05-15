@@ -1,0 +1,9 @@
+{{define "search"}}
+        {{template "header" .}}
+
+	{{range .Projects}}
+	{{.Title}}
+	{{end}}
+
+        {{template "footer" .}}
+{{end}}

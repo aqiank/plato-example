@@ -309,14 +309,14 @@ func init() {
 }
 
 func recommendedProjects(n int) []Project {
-	return queryProject(recommendedProjectsSQL, n)
+	return queryProjects(recommendedProjectsSQL, n)
 }
 
 func latestRelatedProjects(profession string, n int) []Project {
-	return queryProject(latestRelatedProjectsSQL, profession, n)
+	return queryProjects(latestRelatedProjectsSQL, profession, n)
 }
 
-func queryProject(q string, data ...interface{}) []Project {
+func queryProjects(q string, data ...interface{}) []Project {
 	var ps []Project
 	var rows *sql.Rows
 	var err error
