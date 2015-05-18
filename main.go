@@ -28,7 +28,7 @@ func main() {
         server.HandlePage("/", indexPageHandler)
 
         // Demonstrate files handler
-        server.HandleFiles("/css/", "/font/", "/img/", "/js/", "/pt-data/")
+        server.HandleFiles("/css/", "/font/", "/img/", "/js/", "/lib/", "/pt-data/")
 
         // Demonstrate service
         service.AttachAll(service.Service{

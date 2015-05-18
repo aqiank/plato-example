@@ -63,6 +63,9 @@ $(document).ready(function() {
         // datepickers
         $(".datepicker").pickadate();
 
+	// dimmer
+	$(".dimmer-image").dimmer({on: "hover"});
+
 	// tabs
 	$(".menu .item").tab();
 

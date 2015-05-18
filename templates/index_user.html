@@ -19,40 +19,35 @@
 	</div>
 
 	<div id="oi-trending-projects" class="ui page vertical padded grid">
-		<div class="column">
-			<h3 class="ui header">Trending Projects</h3>
-			<div class="ui centered grid">
-				<div class="three column tablet computer only row">
-				{{range call .RecommendedProjects 6}}
-					{{template "project-card" .}}
-				{{end}}
-				</div>
-				<div class="one column mobile only row">
-				{{range call .RecommendedProjects 6}}
-					{{template "project-card" .}}
-				{{end}}
-				</div>
+		<h3 class="ui header pt-text-center">Trending Projects</h3>
+		<div class="ui centered grid">
+			<div class="three column tablet computer only row">
+			{{range call .RecommendedProjects 6}}
+				{{template "project-card" .}}
+			{{end}}
+			</div>
+			<div class="one column mobile only row">
+			{{range call .RecommendedProjects 6}}
+				{{template "project-card" .}}
+			{{end}}
 			</div>
 		</div>
 	</div>
 
 	<div id="oi-active-projects" class="ui page vertical padded grid">
-		<div class="column">
-			<h3 class="ui header">Most Active Projects</h3>
-			<div class="ui centered grid">
-				<div class="three column tablet computer only row">
-				{{range call .RecommendedProjects 6}}
-					{{template "project-card" .}}
-				{{end}}
-				</div>
-				<div class="one column mobile only row">
-				{{range call .RecommendedProjects 6}}
-					{{template "project-card" .}}
-				{{end}}
-				</div>
+		<h3 class="ui header pt-text-center">Most Active Projects</h3>
+		<div class="ui centered grid">
+			<div class="three column tablet computer only row">
+			{{range call .RecommendedProjects 6}}
+				{{template "project-card" .}}
+			{{end}}
+			</div>
+			<div class="one column mobile only row">
+			{{range call .RecommendedProjects 6}}
+				{{template "project-card" .}}
+			{{end}}
 			</div>
 		</div>
 	</div>
-	<div id="status"></div>
 </div>
 {{end}}
