@@ -121,6 +121,18 @@
 		</div>
 	</div>
 
+	<script>
+	$(document).ready(function() {
+		createStoryJS({
+			type: "timeline",
+			width: "100%",
+			height: "600",
+			source: "{{.JSON (call .GetProjectTimeline .User)}}",
+			embed_id: "timeline",
+		});
+	});
+	</script>
+
         {{template "sidebar" .}}
         {{template "footer" .}}
 {{end}}

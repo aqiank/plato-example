@@ -36,7 +36,12 @@ const (
 
 	updateProjectWithoutImageSQL = `UPDATE project SET tagline = ?, status = ?, start_date = ?, end_date = ? WHERE post_id = ?`
 
-	getProjectSQL = `SELECT * FROM project WHERE post_id = ?`
+	getProjectSQL = `SELECT * FROM project WHERE post_id = ? LIMIT 1`
+
+	getProjectsByAuthorIDSQL = `SELECT project.* FROM project
+				    INNER JOIN pt_post
+				    ON project.post_id = pt_post.id
+				    WHERE pt_post.author_id = ?`
 
 	recommendedProjectsSQL = `SELECT project.* FROM project
 				  INNER JOIN pt_post ON project.post_id = pt_post.id
@@ -296,6 +301,10 @@ func getProject(id int64) Project {
 	}
 
 	return p
+}
+
+func getProjectsByAuthorID(authorID int64) []Project {
+	return queryProjects(getProjectsByAuthorIDSQL, authorID)
 }
 
 func init() {
