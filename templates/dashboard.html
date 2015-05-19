@@ -51,7 +51,7 @@
 										<a href="/project/{{.PostID}}">
 											{{.Post.Title}}
 										</a>
-										<div class="date">{{$.NiceTime .CreatedAt}}</div>
+										<div class="date">{{nicetime .CreatedAt}}</div>
 									</div>
 									<div class="extra text">
 										{{$comment.Text}}
@@ -72,7 +72,7 @@
 								<div class="content">
 									<div class="summary">
 										<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> created a project called <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
-										<div class="date">{{$.NiceTime .CreatedAt}}</div>
+										<div class="date">{{nicetime .CreatedAt}}</div>
 									</div>
 									<div class="extra images">
 										{{$project := call $.GetProject .SourceID}}
