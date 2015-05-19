@@ -365,7 +365,7 @@ func queryProjects(q string, data ...interface{}) []Project {
 }
 
 func saveProjectImage(id int64, r *http.Request) (string, error) {
-	folderPath := fmt.Sprintf("%s/%s/%d/", db.DataDir, "project/img", id)
+	folderPath := fmt.Sprintf("%s/%s/%d", db.DataDir, "project/img", id)
 	imageURL, err := db.SaveImage(folderPath, "image", r)
 	if err != nil {
 		return "", debug.Error(err)
@@ -449,6 +449,8 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 			return nil, debug.Error(err)
 		}
 
+		// generate timeline
+		generateTimeline(user)
 		joinProject(postID, strconv.FormatInt(user.ID(), 10))
 		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/", postID), 302)
 	case "PUT":

@@ -1,108 +1,108 @@
 {{define "project_tab_content_info"}}
 	{{with .Project}}
 	<div class="ui bottom attached active tab" data-tab="info">
-		<div class="ui grid">
-			<div class="twelve wide column">
-				<div class="ui vertically padded grid">
-					<div class="column">
-						<h1>{{.Title}}</h1>
-						<h3>{{.Tagline}}</h3>
-						<p>{{$.HTML .Content}}</h1>
-					</div>
-				</div>
-				<div class="ui vertically padded grid">
-					<div class="column">
-						<h4 class="ui header">Members</h4>
-						<div class="ui items">
-						{{range .Members}}
-							<div class="item">
-								<a class="ui tiny image"><img src="{{.AvatarURL}}"></a>
-								<div class="content">
-									<a class="header">{{.Nicename}}</a>
-									<div class="description">
-										{{.ShortDescription 140}}...
-									</div>
-								</div>
-							</div>
-						{{end}}
-						</div>
-					</div>
-				</div>
-				<div class="ui vertically padded grid">
-					<div class="column">
-						<h4 class="ui header">Requirements</h4>
-						<div class="ui two columns grid">
-							{{range .Professions}}
-							<div class="column">
-								<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
-									<div class="bar"></div>
-									<div class="label">{{$.Project.FilledProfession .Name}} / {{$.Project.NeededProfession .Name}} {{.Name}}</div>
-								</div>
-							</div>
-							{{end}}
-						</div>
-					</div>
+		<div id="sticky-context" class="ui segment">
+			<div class="ui vertically padded grid">
+				<div class="column">
+					<h1>{{.Title}}</h1>
+					<h3>{{.Tagline}}</h3>
+					<p>{{$.HTML .Content}}</h1>
 				</div>
 			</div>
-			<div id="project-sidebar" class="four wide column">
-				<div class="row">
-					<div class="label">
-						Start Date
-					</div>
-					<div class="value">
-						<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
-					</div>
-				</div>
-				<div class="row">
-					<div class="label">
-						End Date
-					</div>
-					<div class="value">
-						<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
-					</div>
-				</div>
-				<div class="row">
-					<div class="label">
-						DaysLeft
-					</div>
-					<div class="value">
-					{{if .Ended}}
-						<h3 class="ui header">Ended</h3>
-					{{else if .Started}}
-						{{.DaysLeft}}
-					{{else}}
-						<h3 class="ui header">Not Yet Started</h3>
+			<div class="ui vertically padded grid">
+				<div class="column">
+					<h4 class="ui header">Members</h4>
+					<div class="ui items">
+					{{range .Members}}
+						<div class="item">
+							<a class="ui tiny image"><img src="{{.AvatarURL}}"></a>
+							<div class="content">
+								<a class="header">{{.Nicename}}</a>
+								<div class="description">
+									{{.ShortDescription 140}}...
+								</div>
+							</div>
+						</div>
 					{{end}}
 					</div>
 				</div>
-				<div class="row">
-					<div class="label">
-						Supports
-					</div>
-					<div class="value">
-						<h3 class="ui header">{{.Supports}}</h3>
-					</div>
-				</div>
-				{{if eq .Post.AuthorID $.User.ID}}
-				<a class="ui button" href="/project/edit/{{.PostID}}">Edit Project</a>
-				{{else}}
-				<div class="ui vertically padded grid">
-					<div class="column">
-						<a class="ui red button" {{if not (.SupportedBy $.User.ID)}} href="/project?postID={{.PostID}}&method=support" {{end}}>
-							Support{{if .SupportedBy $.User.ID}}ed{{end}}
-						</a>
-						<a class="ui teal button" {{if not (or (.AppliedBy $.User.ID) (.JoinedBy $.User.ID))}} href="/project?postID={{.PostID}}&method=apply" {{end}}>
-							{{if .JoinedBy $.User.ID}}
-							Joined
-							{{else if .AppliedBy $.User.ID}}
-							Applied
-							{{else}}
-							Apply
-							{{end}}
-						</a>
+			</div>
+			<div class="ui vertically padded grid">
+				<div class="column">
+					<h4 class="ui header">Requirements</h4>
+					<div class="ui two columns grid">
+						{{range .Professions}}
+						<div class="column">
+							<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
+								<div class="bar"></div>
+								<div class="label">{{$.Project.FilledProfession .Name}} / {{$.Project.NeededProfession .Name}} {{.Name}}</div>
+							</div>
+						</div>
+						{{end}}
 					</div>
 				</div>
-				{{end}}
+			</div>
+			<div class="right ui rail">
+				<div id="project-sidebar" class="ui sticky four wide column">
+					<div class="row">
+						<div class="label">
+							Start Date
+						</div>
+						<div class="value">
+							<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="label">
+							End Date
+						</div>
+						<div class="value">
+							<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="label">
+							DaysLeft
+						</div>
+						<div class="value">
+						{{if .Ended}}
+							<h3 class="ui header">Ended</h3>
+						{{else if .Started}}
+							{{.DaysLeft}}
+						{{else}}
+							<h3 class="ui header">Not Yet Started</h3>
+						{{end}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="label">
+							Supports
+						</div>
+						<div class="value">
+							<h3 class="ui header">{{.Supports}}</h3>
+						</div>
+					</div>
+					{{if eq .Post.AuthorID $.User.ID}}
+					<a class="ui button" href="/project/edit/{{.PostID}}">Edit Project</a>
+					{{else}}
+					<div class="ui vertically padded grid">
+						<div class="column">
+							<a class="ui red button" {{if not (.SupportedBy $.User.ID)}} href="/project?postID={{.PostID}}&method=support" {{end}}>
+								Support{{if .SupportedBy $.User.ID}}ed{{end}}
+							</a>
+							<a class="ui teal button" {{if not (or (.AppliedBy $.User.ID) (.JoinedBy $.User.ID))}} href="/project?postID={{.PostID}}&method=apply" {{end}}>
+								{{if .JoinedBy $.User.ID}}
+								Joined
+								{{else if .AppliedBy $.User.ID}}
+								Applied
+								{{else}}
+								Apply
+								{{end}}
+							</a>
+						</div>
+					</div>
+					{{end}}
+				</div>
 			</div>
 		</div>
 	</div>

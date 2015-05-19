@@ -66,8 +66,11 @@ $(document).ready(function() {
 	// dimmer
 	$(".dimmer-image").dimmer({on: "hover"});
 
-	// tabs
-	$(".menu .item").tab();
+	// owl carousel
+	$(".owl-carousel").owlCarousel({
+		items: 3,
+		autoHeight: true
+	});
 
 	// progress
 	$(".progress").progress();
@@ -75,11 +78,11 @@ $(document).ready(function() {
 	// parallax
 	$(".parallax").parallax();
 
-	// owl carousel
-	$(".owl-carousel").owlCarousel({
-		items: 3,
-		autoHeight: true
-	});
+	// sticky
+	$(".ui.sticky").sticky({context: "#sticky-context"});
+
+	// tabs
+	$(".menu .item").tab();
 });
 
 function setImageInputPreview(input, preview, uploadURL, success) {

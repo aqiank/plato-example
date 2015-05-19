@@ -22,10 +22,11 @@ type Timeline struct {
 	StartDate string `json:"startDate"`
 	EndDate   string `json:"endDate"`
 	Text      string `json:"text"`
+	ClassName string `json:"classname"`
 	Asset     Asset  `json:"asset"`
 }
 
-func generateProjectTimelineJSON(user entity.User) {
+func generateTimeline(user entity.User) {
 	var ts []Timeline
 
 	ps := getProjectsByAuthorID(user.ID())
@@ -36,6 +37,7 @@ func generateProjectTimelineJSON(user entity.User) {
 		t.StartDate = p.StartDate().Format("2006,1,2")
 		t.EndDate = p.EndDate().Format("2006,1,2")
 		t.Text = p.ShortContent(140)
+		t.ClassName = "timeline-project"
 		t.Asset.Media = p.ImageURL()
 
 		ts = append(ts, t)
@@ -67,7 +69,7 @@ func generateProjectTimelineJSON(user entity.User) {
 		return
 	}
 
-	filepath := projectTimelinePath(user)
+	filepath := timelinePath(user)
 	if err = os.MkdirAll(path.Dir(filepath), 0700); err != nil {
 		debug.Warn(err)
 		return
@@ -86,6 +88,6 @@ func generateProjectTimelineJSON(user entity.User) {
 	}
 }
 
-func projectTimelinePath(user entity.User) string {
+func timelinePath(user entity.User) string {
 	return db.DataDir + "/timeline/" + user.Email() + "/timeline.json"
 }
