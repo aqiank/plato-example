@@ -8,7 +8,7 @@ import (
 
 	"plato/db"
 	"plato/debug"
-	"plato/server"
+	"plato/server/page"
 	"plato/server/service"
 	"plato/server/session"
 )
@@ -17,47 +17,47 @@ var (
 	ErrUpdateProfile = errors.New("failed to update profile")
 )
 
-func profilePageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func profilePageHandler(w http.ResponseWriter, r *http.Request) error {
 	user := session.User(r)
 	if !session.IsLoggedIn(user) {
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil
 	}
 
 	if r.FormValue("what") == "" {
-		return nil, server.ServePage(w, r, "profile", nil)
+		return page.Serve(w, r, "profile", nil)
 	}
 
 	if err := user.Update(w, r); err != nil {
-		return nil, server.ErrorCallback(w, r, ErrUpdateProfile)
+		return ErrUpdateProfile
 	}
 
-	return nil, nil
+	return nil
 }
 
-func viewProfilePageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func viewProfilePageHandler(w http.ResponseWriter, r *http.Request) error {
 	user := session.User(r)
 	if !session.IsLoggedIn(user) {
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil
 	}
 
 	base := path.Base(r.URL.Path[1:])
 	userID, err := strconv.ParseInt(base, 10, 0)
 	if err != nil {
-		return nil, debug.Error(err)
+		return debug.Error(err)
 	}
 
 	otherUser := db.GetUser(userID)
 	if otherUser == nil {
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil
 	}
 
-	return nil, server.ServePage(w, r, "profile-view", service.Service{"OtherUser": otherUser})
+	return page.Serve(w, r, "profile-view", service.Service{"OtherUser": otherUser})
 }
 
 func handleProfile() {
-	server.HandlePage("/profile", profilePageHandler)
-	server.HandlePage("/profile/", viewProfilePageHandler)
+	page.Handle("/profile", profilePageHandler)
+	page.Handle("/profile/", viewProfilePageHandler)
 }

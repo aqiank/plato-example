@@ -14,7 +14,8 @@ import (
 	"plato/db/dateutil"
 	"plato/debug"
 	"plato/entity"
-	"plato/server"
+	"plato/server/api"
+	"plato/server/page"
 	"plato/server/service"
 	"plato/server/session"
 )
@@ -372,24 +373,24 @@ func saveProjectImage(id int64, r *http.Request) (string, error) {
 	return "/" + imageURL, nil
 }
 
-func newProjectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	return nil, server.ServePage(w, r, "project-new", nil)
+func newProjectPageHandler(w http.ResponseWriter, r *http.Request) error {
+	return page.Serve(w, r, "project-new", nil)
 }
 
-func projectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func projectPageHandler(w http.ResponseWriter, r *http.Request) error {
 	base := path.Base(r.URL.Path[1:])
 	id, err := strconv.ParseInt(base, 10, 0)
 	if err != nil {
 		debug.Warn(err)
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil
 	}
 
 	p := getProject(id)
-	return nil, server.ServePage(w, r, "project", service.Service{"Project": p})
+	return page.Serve(w, r, "project", service.Service{"Project": p})
 }
 
-func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) (interface{}, error) {
 	user := session.User(r)
 	if !session.IsLoggedIn(user) {
 		http.Redirect(w, r, "/", 302)
@@ -418,7 +419,7 @@ func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error)
 		return postID, nil
 	}
 
-	data, err := server.PostHandler(w, r)
+	data, err := api.PostHandler(w, r, nil)
 	if err != nil {
 		return nil, debug.Error(err)
 	}
@@ -465,17 +466,17 @@ func projectHandler(w http.ResponseWriter, r *http.Request) (interface{}, error)
 	return id, nil
 }
 
-func editProjectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func editProjectPageHandler(w http.ResponseWriter, r *http.Request) error {
 	base := path.Base(r.URL.Path[1:])
 	id, err := strconv.ParseInt(base, 10, 0)
 	if err != nil {
 		debug.Warn(err)
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil
 	}
 
 	p := getProject(id)
-	return nil, server.ServePage(w, r, "project-edit", service.Service{"Project": p})
+	return page.Serve(w, r, "project-edit", service.Service{"Project": p})
 }
 
 func insertProfession(postID int64, r *http.Request) error {
@@ -530,16 +531,16 @@ func updateProfession(postID int64, r *http.Request) error {
 	return nil
 }
 
-func commentSuccess(w http.ResponseWriter, r *http.Request, data interface{}) error {
+func onComment(w http.ResponseWriter, r *http.Request, data interface{}) (interface{}, error) {
 	id, ok := data.(int64)
 	if !ok {
 		http.Redirect(w, r, "/", 302)
-		return nil
+		return nil, nil
 	}
 
 	url := fmt.Sprintf("/project/%d", id)
 	http.Redirect(w, r, url, 302)
-	return nil
+	return id, nil
 }
 
 func supportProject(postID, authorID int64) {
@@ -573,10 +574,10 @@ func joinedProject(postID, authorID int64) bool {
 }
 
 func handleProject() {
-	server.SetSuccessCallback("/post/comment", commentSuccess)
+	api.Append("/post/comment", onComment)
+	api.Handle("/project", projectHandler)
 
-	server.HandlePage("/project", projectHandler)
-	server.HandlePage("/project/", projectPageHandler)
-	server.HandlePage("/project/new", newProjectPageHandler)
-	server.HandlePage("/project/edit/", editProjectPageHandler)
+	page.Handle("/project/", projectPageHandler)
+	page.Handle("/project/new", newProjectPageHandler)
+	page.Handle("/project/edit/", editProjectPageHandler)
 }

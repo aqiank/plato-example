@@ -7,7 +7,7 @@ import (
 	"plato/db"
 	"plato/debug"
 	"plato/entity"
-	"plato/server"
+	"plato/server/page"
 	"plato/server/session"
 )
 
@@ -62,21 +62,21 @@ func getApplicants(authorID int64) []Applicant {
 	return as
 }
 
-func dashboardPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func dashboardPageHandler(w http.ResponseWriter, r *http.Request) error {
 	user := session.User(r)
 	if !session.IsLoggedIn(user) {
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil
 	}
 
 	generateProjectTimelineJSON(user)
 	if r.FormValue("what") == "" {
-		return nil, server.ServePage(w, r, "dashboard", nil)
+		return page.Serve(w, r, "dashboard", nil)
 	}
 
-	return nil, nil
+	return nil
 }
 
 func handleDashboard() {
-	server.HandlePage("/dashboard", dashboardPageHandler)
+	page.Handle("/dashboard", dashboardPageHandler)
 }

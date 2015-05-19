@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"plato/server"
+	"plato/server/page"
 	"plato/server/service"
 )
 
@@ -17,11 +17,11 @@ func searchProjects(s string) []Project {
 	return queryProjects(searchProjectsSQL, "%"+s+"%")
 }
 
-func searchPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+func searchPageHandler(w http.ResponseWriter, r *http.Request) error {
 	s := r.FormValue("s")
-	return nil, server.ServePage(w, r, "search", service.Service{"Projects": searchProjects(s)})
+	return page.Serve(w, r, "search", service.Service{"Projects": searchProjects(s)})
 }
 
 func handleSearch() {
-	server.HandlePage("/search", searchPageHandler)
+	page.Handle("/search", searchPageHandler)
 }
