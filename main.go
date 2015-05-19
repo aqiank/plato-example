@@ -39,7 +39,7 @@ func main() {
 		"LatestRelatedProjects": latestRelatedProjects,
 		"GetProject":            getProject,
 		"GetApplicants":         getApplicants,
-		"GetProjectTimeline":    getProjectTimeline,
+		"ProjectTimelinePath":   projectTimelinePath,
 	})
 
 	log.Println("starting plato-example..")

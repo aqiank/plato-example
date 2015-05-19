@@ -127,7 +127,7 @@
 			type: "timeline",
 			width: "100%",
 			height: "600",
-			source: "{{.JSON (call .GetProjectTimeline .User)}}",
+			source: "{{call .ProjectTimelinePath .User}}",
 			embed_id: "timeline",
 		});
 	});

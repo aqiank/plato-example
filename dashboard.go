@@ -69,6 +69,7 @@ func dashboardPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, 
 		return nil, nil
 	}
 
+	generateProjectTimelineJSON(user)
 	if r.FormValue("what") == "" {
 		return nil, server.ServePage(w, r, "dashboard", nil)
 	}
