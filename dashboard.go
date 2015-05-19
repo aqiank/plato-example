@@ -18,7 +18,6 @@ const (
 			    INNER JOIN pt_post_meta
 			    ON pt_post_meta.post_id = pt_post.id
 			    WHERE pt_post.author_id = ? AND pt_post_meta.key = "apply"`
-
 )
 
 type Applicant struct {
@@ -78,5 +77,5 @@ func dashboardPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, 
 }
 
 func handleDashboard() {
-        server.HandlePage("/dashboard", dashboardPageHandler)
+	server.HandlePage("/dashboard", dashboardPageHandler)
 }

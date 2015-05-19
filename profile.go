@@ -6,8 +6,8 @@ import (
 	"path"
 	"strconv"
 
-	"plato/debug"
 	"plato/db"
+	"plato/debug"
 	"plato/server"
 	"plato/server/service"
 	"plato/server/session"
@@ -58,6 +58,6 @@ func viewProfilePageHandler(w http.ResponseWriter, r *http.Request) (interface{}
 }
 
 func handleProfile() {
-        server.HandlePage("/profile", profilePageHandler)
-        server.HandlePage("/profile/", viewProfilePageHandler)
+	server.HandlePage("/profile", profilePageHandler)
+	server.HandlePage("/profile/", viewProfilePageHandler)
 }

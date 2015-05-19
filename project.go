@@ -15,8 +15,8 @@ import (
 	"plato/debug"
 	"plato/entity"
 	"plato/server"
-	"plato/server/session"
 	"plato/server/service"
+	"plato/server/session"
 )
 
 const (
@@ -99,20 +99,20 @@ type Project interface {
 }
 
 type project struct {
-	postID int64
-	tagline string
-	status string
-	imageURL string
+	postID      int64
+	tagline     string
+	status      string
+	imageURL    string
 	recommended bool
-	startDate time.Time
-	endDate time.Time
-	members []entity.User
+	startDate   time.Time
+	endDate     time.Time
+	members     []entity.User
 }
 
 type Profession struct {
 	PostID int64
-	Name string
-	Count int64
+	Name   string
+	Count  int64
 }
 
 func (p project) Post() entity.Post {
@@ -216,7 +216,7 @@ func (p project) ProfessionProgress(profession string) int64 {
 func (p project) Professions() []Profession {
 	var ps []Profession
 
-	rows, err := db.Query(getProfessionSQL, p.postID);
+	rows, err := db.Query(getProfessionSQL, p.postID)
 	if err != nil {
 		debug.Warn(err)
 		return nil
@@ -373,7 +373,7 @@ func saveProjectImage(id int64, r *http.Request) (string, error) {
 }
 
 func newProjectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-        return nil, server.ServePage(w, r, "project-new", nil)
+	return nil, server.ServePage(w, r, "project-new", nil)
 }
 
 func projectPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
@@ -486,7 +486,7 @@ func insertProfession(postID int64, r *http.Request) error {
 
 		// check if there's space character
 		idx := strings.IndexRune(k, ' ')
-		if idx == -1 || idx + 1 >= len(k) {
+		if idx == -1 || idx+1 >= len(k) {
 			continue
 		}
 		idx++
@@ -512,7 +512,7 @@ func updateProfession(postID int64, r *http.Request) error {
 
 		// check if there's space character
 		idx := strings.IndexRune(k, ' ')
-		if idx == -1 || idx + 1 >= len(k) {
+		if idx == -1 || idx+1 >= len(k) {
 			continue
 		}
 		idx++
@@ -575,9 +575,8 @@ func joinedProject(postID, authorID int64) bool {
 func handleProject() {
 	server.SetSuccessCallback("/post/comment", commentSuccess)
 
-        server.HandlePage("/project", projectHandler)
-        server.HandlePage("/project/", projectPageHandler)
-        server.HandlePage("/project/new", newProjectPageHandler)
-        server.HandlePage("/project/edit/", editProjectPageHandler)
+	server.HandlePage("/project", projectHandler)
+	server.HandlePage("/project/", projectPageHandler)
+	server.HandlePage("/project/new", newProjectPageHandler)
+	server.HandlePage("/project/edit/", editProjectPageHandler)
 }
-

@@ -19,9 +19,9 @@ func searchProjects(s string) []Project {
 
 func searchPageHandler(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	s := r.FormValue("s")
-        return nil, server.ServePage(w, r, "search", service.Service{"Projects": searchProjects(s)})
+	return nil, server.ServePage(w, r, "search", service.Service{"Projects": searchProjects(s)})
 }
 
 func handleSearch() {
-        server.HandlePage("/search", searchPageHandler)
+	server.HandlePage("/search", searchPageHandler)
 }

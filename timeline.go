@@ -5,18 +5,18 @@ import (
 )
 
 type Asset struct {
-	Media string `json:"media"`
-	Credit string `json:"credit"`
+	Media   string `json:"media"`
+	Credit  string `json:"credit"`
 	Caption string `json:"caption"`
 }
 
 type Timeline struct {
-	Headline string `json:"headline"`
-	Type string `json:"type"`
+	Headline  string `json:"headline"`
+	Type      string `json:"type"`
 	StartDate string `json:"startDate"`
-	EndDate string `json:"endDate"`
-	Text string `json:"text"`
-	Asset Asset `json:"asset"`
+	EndDate   string `json:"endDate"`
+	Text      string `json:"text"`
+	Asset     Asset  `json:"asset"`
 }
 
 func getProjectTimeline(user entity.User) interface{} {
@@ -36,11 +36,11 @@ func getProjectTimeline(user entity.User) interface{} {
 	}
 
 	return struct {
-		Headline string `json:"headline"`
-		Type string `json:"type"`
-		Text string `json:"text"`
-		Asset Asset `json:"asset"`
-		Date []Timeline `json:"date"`
+		Headline string     `json:"headline"`
+		Type     string     `json:"type"`
+		Text     string     `json:"text"`
+		Asset    Asset      `json:"asset"`
+		Date     []Timeline `json:"date"`
 	}{
 		"Project Timeline",
 		"default",

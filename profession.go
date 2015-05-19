@@ -1,30 +1,30 @@
 package main
 
 import (
-       "bufio"
-       "os"
+	"bufio"
+	"os"
 
-       "plato/debug"
+	"plato/debug"
 )
 
 var professions []string
 
 func loadProfessions() {
-        file, err := os.Open("professions.txt")
-        if err != nil {
-                debug.Warn(err)
-                return
-        }
+	file, err := os.Open("professions.txt")
+	if err != nil {
+		debug.Warn(err)
+		return
+	}
 
-        scanner := bufio.NewScanner(file)
-        for scanner.Scan() {
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
 		professions = append(professions, scanner.Text())
-        }
+	}
 
-        if err = scanner.Err(); err != nil {
-               debug.Warn(err)
-               return
-        }
+	if err = scanner.Err(); err != nil {
+		debug.Warn(err)
+		return
+	}
 
-        debug.Log("loaded", len(professions), "professions")
+	debug.Log("loaded", len(professions), "professions")
 }
