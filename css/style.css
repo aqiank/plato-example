@@ -35,9 +35,24 @@
 .parallax-window { height: 300px; background: transparent; }
 .parallax-window .valign-wrapper { background: rgba(0,0,0,0.4); height: 100%; }
 .parallax-window .valign { display: inline-block; margin: 0 auto }
+
 #project-title { display: inline-block; color: rgba(255,255,255,0.9); }
 
 nav a.button-collapse { margin: 0 16px }
 @media only screen and (min-width: 993px) {
 	nav a.button-collapse { display: block }
 }
+
+.brand-logo { margin: 0 16px }
+
+#nav { margin-bottom: 0 }
+
+#notifications-dropdown img { width: 48px; height: 48px; }
+#notifications-dropdown a { font-size: 1rem; display: inline; padding: 0 }
+
+::-webkit-input-placeholder { color: white }
+::-moz-placeholder { color: white }
+::-ms-input-placeholder { color: white }
+
+#search:hover { background: rgba(255,255,255,0.3) }
+#search:focus:hover { background: white }

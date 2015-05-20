@@ -1,0 +1,38 @@
+{{define "modal-create-task"}}
+
+        <form class="modal" id="modal-create-task" action="/task" method="POST">
+                <div class="modal-content">
+                        <h4>Create Task</h4>
+                        <div class="row">
+                                <div class="input-field col s12">
+                                        <input id="task-title" type="text" name="title">
+					<label for="task-title">Title</label>
+                                </div>
+			</div>
+                        <div class="row">
+                                <div class="input-field col s12">
+                                        <textarea id="task-description" type="text" name="description" class="materialize-textarea"></textarea>
+					<label for="task-description">Description</label>
+                                </div>
+			</div>
+			<div class="row">
+				<div class="col s6">
+					<input id="task-start-date" type="date" class="datepicker">
+					<label for="task-start-date">Start Date</label>
+				</div>
+				<div class="col s6">
+					<input id="task-end-date" type="date" class="datepicker">
+					<label for="task-end-date">End Date</label>
+				</div>
+			</div>
+			<p>
+				<input id="task-restricted" type="checkbox" class="filled-in">
+				<label for="task-restricted">Restricted</label>
+			</p>
+                </div>
+		<div class="modal-footer">
+			<button type="submit" class="modal-action btn-flat teal white-text">Submit</button>
+		</div>
+        </form>
+
+{{end}}

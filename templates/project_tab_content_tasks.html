@@ -1,10 +1,13 @@
 {{define "project_tab_content_tasks"}}
+
+	{{template "modal-create-task" .}}
+
 	{{with .Project}}
 	<div id="tasks" class="col s12">
 		<div id="sticky-context" class="ui segment">
 			<div class="ui vertically padded grid">
 				<div class="column">
-					<h1>Tasks</h1>
+					<h3>Tasks</h3>
 				</div>
 			</div>
 			<div class="right ui rail">
@@ -34,7 +37,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<a class="ui red button" href="#">Create Task</a>
+						<a class="modal-trigger btn btn-flat teal white-text" href="#modal-create-task">Create Task</a>
 					</div>
 				</div>
 			</div>

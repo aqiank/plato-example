@@ -1,7 +1,5 @@
 $(document).ready(function() {
-        // datepickers
-        // $(".datepicker").pickadate();
-
+	// modal
 	$(".modal-trigger").leanModal();
 
 	// knob
@@ -19,8 +17,21 @@ $(document).ready(function() {
 	// sidenav
 	$(".button-collapse").sideNav();
 
-	// parallax
-	// $(".parallax").parallax();
+	// dropdown
+	$(".dropdown-button").dropdown({
+		inDuration: 300,
+		outDuration: 225,
+		constrain_width: false,
+		hover: true,
+		gutter: 0,
+		belowOrigin: true,
+	});
+
+	// datepicker
+	$(".datepicker").pickadate({
+		selectMonths: true,
+		selectYears: 5,
+	});
 });
 
 function setImageInputPreview(input, preview, uploadURL, success) {
