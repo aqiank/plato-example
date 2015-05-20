@@ -1,23 +1,18 @@
 {{define "project-card"}}
-	<div class="column">
-		<div class="ui fluid card">
-			<a class="image" href="/project/{{.PostID}}">
+	<div class="col s12">
+		<div class="card">
+			<a class="card-image" href="/project/{{.PostID}}">
 				{{with .ImageURL}}
 				<img src="{{.}}">
 				{{else}}
 				<img src="/img/dummies/project.png">
 				{{end}}
+				<span class="card-title">{{.Title}}</span>
 			</a>
-			<div class="content">
-				<a class="header">{{.Title}}</a>
-				<div class="meta">
-					Project
-				</div>
-				<div class="description">
-					{{.ShortContent 140}}
-				</div>
+			<div class="card-content">
+				<p>{{.ShortContent 140}}</p>
 			</div>
-			<div class="extra content">
+			<div class="card-action">
 				<a href="/project/{{.PostID}}">View Project</a>
 			</div>
 		</div>

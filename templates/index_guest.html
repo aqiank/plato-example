@@ -1,61 +1,63 @@
 {{define "index_guest"}}
-        <div id="oi-front-cover" class="pt-valign-wrapper">
-                <div class="pt-valign pt-text-center">
-                        <h1 class="ui header">BBH OPEN INNOVATION</h1>
-                        <h2 class="ui header">Connect with other black sheeps to turn great ideas into reality</h1>
-                        <a href="#!" class="ui red button sign-up">JOIN NOW</a>
+        <div id="oi-front-cover" class="row valign-wrapper">
+                <div class="col s12 valign center-align">
+                        <h3 class="white-text"><strong>BBH OPEN INNOVATION</strong></h3>
+                        <p class="flow-text white-text">Connect with other black sheeps to turn great ideas into reality</p>
+                        <button data-target="form-sign-up" class="modal-trigger btn btn-flat red white-text">JOIN NOW</button>
                 </div>
         </div><!-- #oi-front-cover -->
 
-        <div id="oi-quotes" class="pt-full-width pt-text-center">
+        <div id="oi-quotes" class="row">
                 {{range .Quotes}}
-                <div class="row centered">
-                        <h4 class="ui header">{{.Text}}</h3>
-                        <h4 class="ui header">-- {{.Author}}</h4>
+                <div class="row center-align">
+                        <h5>{{.Text}}</h5>
+                        <h5>-- {{.Author}}</h5>
                 </div>
                 {{end}}
         </div><!-- #oi-quotes -->
 
-        <div id="oi-steps" class="ui page grid">
-		<div id="oi-step-one" class="row">
-			<div class="eight wide column">
-				<h2 class="ui header">Step 1: Share</h2>
-				<p>
-					Have a great idea for a project, but don’t quite know how
-					to make it happen? Share your idea on BBH Open Innovation.
-				</p>
+        <div id="oi-steps" class="row">
+		<div class="container">
+			<div class="row">
+				<div class="col s6">
+					<h2>Step 1: Share</h2>
+					<p>
+						Have a great idea for a project, but don’t quite know how
+						to make it happen? Share your idea on BBH Open Innovation.
+					</p>
+				</div>
+				<div class="col s6">
+					<img style="width: 100%" src="/img/step_share.png">
+				</div>
 			</div>
-			<div class="eight wide column">
-				<img src="/img/step_share.png">
-			</div>
-		</div>
 
-		<div id="oi-step-two" class="row">
-			<div class="eight wide column">
-				<img src="/img/step_connect.png">
+			<div class="row">
+				<div class="col s6">
+					<img style="width: 100%" src="/img/step_connect.png">
+				</div>
+				<div class="col s6">
+					<h2>Step 2: Connect</h2>
+					<p>
+						BBH OI connects collaborators. It puts you in touch with
+						people who have what your project needs and want to get
+						involved. And it helps you find exciting projects to get
+						on board with.
+					</p>
+				</div>
 			</div>
-			<div class="eight wide column">
-				<h2 class="ui header">Step 2: Connect</h2>
-				<p>
-					BBH OI connects collaborators. It puts you in touch with
-					people who have what your project needs and want to get
-					involved. And it helps you find exciting projects to get
-					on board with.
-				</p>
-			</div>
-		</div>
 
-		<div id="oi-step-three" class="row">
-			<div class="eight wide column">
-				<h2 class="ui header">Step 3: Make</h2>
-				<p>
-					With BBHOI, you make things happen. Working together on
-					the project, you take what was once just an idea and turn
-					it into a reality!
-				</p>
-			</div>
-			<div class="eight wide column">
-				<img src="/img/step_make.png">
+			<div class="row">
+				<div class="col s6">
+					<h2>Step 3: Make</h2>
+					<p>
+						With BBHOI, you make things happen. Working together on
+						the project, you take what was once just an idea and turn
+						it into a reality!
+					</p>
+				</div>
+				<div class="col s6">
+					<img style="width: 100%" src="/img/step_make.png">
+				</div>
 			</div>
 		</div>
         </div>

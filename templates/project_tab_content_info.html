@@ -1,113 +1,87 @@
 {{define "project_tab_content_info"}}
 	{{with .Project}}
-	<div class="ui bottom attached active tab" data-tab="info">
-		<div id="sticky-context" class="ui segment">
-			<div class="ui vertically padded grid">
-				<div class="column">
-					<h1>{{.Title}}</h1>
-					<h3>{{.Tagline}}</h3>
-					<p>{{$.HTML .Content}}</h1>
-				</div>
+	<div id="info" class="col s12">
+		<div class="col s9">
+			<div class="row">
+				<h1>{{.Title}}</h1>
+				<h3>{{.Tagline}}</h3>
+				<p>{{$.HTML .Content}}</h1>
 			</div>
-			<div class="ui vertically padded grid">
-				<div class="column">
-					<h4 class="ui header">Requirements</h4>
-					<div class="ui four columns grid">
-						{{$joined := .JoinedBy $.User.ID}}
-						{{$applied := .AppliedBy $.User.ID}}
-						{{range .Requirements}}
-						<div class="column dimmable">
-							<div class="ui dimmer dimmer-requirement">
-								<div class="content">
-									<div class="center">
-										<h2 class="ui inverted header">{{.Name}}</h2>
-										{{if not (or ($applied) ($joined))}}
-										<a class ="ui primary button" href="/project?postID={{.PostID}}&method=apply&role={{.Name}}">Apply</a>
-										{{end}}
-									</div>
-								</div>
-							</div>
-							<input type="text" class="knob" value="{{$.Project.FilledRequirement .Name}}"
-								data-fgColor="#222222"
-								data-skin="tron"
-								data-thickness=".2"
-								data-readOnly="true"
-								data-min="0" 
-								data-max="{{$.Project.NeededRequirement .Name}}" >
-						</div>
-						{{end}}
-					</div>
-				</div>
-			</div>
-			<div class="ui vertically padded grid">
-				<div class="column">
-					<h4 class="ui header">Members</h4>
-					<div class="ui items">
-					{{range .Members}}
-						<div class="item">
-							<a class="ui tiny image"><img src="{{.User.AvatarURL}}"></a>
-							<div class="content">
-								<a class="header">{{.User.Nicename}}</a>
-								<div class="description">
-									{{.User.ShortDescription 140}}...
-								</div>
-							</div>
-						</div>
-					{{end}}
-					</div>
-				</div>
-			</div>
-			<div class="right ui rail">
-				<div id="project-sidebar" class="ui sticky four wide column">
-					<div class="row">
-						<div class="label">
-							Start Date
-						</div>
-						<div class="value">
-							<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="label">
-							End Date
-						</div>
-						<div class="value">
-							<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="label">
-							DaysLeft
-						</div>
-						<div class="value">
-						{{if .Ended}}
-							<h3 class="ui header">Ended</h3>
-						{{else if .Started}}
-							{{.DaysLeft}}
+			<div class="row">
+				<h4>Requirements</h4>
+				{{$applied := .AppliedBy $.User.ID}}
+				{{$joined := .JoinedBy $.User.ID}}
+				{{range .Requirements}}
+				<div class="col s3 center-align">
+					<p>{{.Name}}</p>
+					<input type="text" class="knob" value="{{$.Project.FilledRequirement .Name}}"
+						data-width="150"
+						{{if eq ($.Project.RequirementProgress .Name) 100}}
+						data-fgColor="#33bb33"
+						{{else if gt ($.Project.RequirementProgress .Name) 66}}
+						data-fgColor="#dddd33"
+						{{else if gt ($.Project.RequirementProgress .Name) 33}}
+						data-fgColor="#dd3333"
 						{{else}}
-							<h3 class="ui header">Not Yet Started</h3>
+						data-fgColor="#333333"
 						{{end}}
-						</div>
-					</div>
-					<div class="row">
-						<div class="label">
-							Supports
-						</div>
-						<div class="value">
-							<h3 class="ui header">{{.Supports}}</h3>
-						</div>
-					</div>
-					{{if eq .Post.AuthorID $.User.ID}}
-					<a class="ui button" href="/project/edit/{{.PostID}}">Edit Project</a>
-					{{else}}
-					<div class="ui vertically padded grid">
-						<div class="column">
-							<a class="ui red button" {{if not (.SupportedBy $.User.ID)}} href="/project?postID={{.PostID}}&method=support" {{end}}>
-								Support{{if .SupportedBy $.User.ID}}ed{{end}}
-							</a>
-						</div>
-					</div>
-					{{end}}
+						data-thickness=".2"
+						data-min="0"
+						data-max="{{$.Project.NeededRequirement .Name}}"
+						data-readOnly="true" >
+				</div>
+				{{end}}
+			</div>
+			<div class="row">
+				<h4>Members</h4>
+				<ul class="collection">
+				{{range .Members}}
+					<li class="collection-item avatar">
+						<a href="/profile/{{.User.ID}}"><img class="circle" src="{{.User.AvatarURL}}"></a>
+						<span class="title">{{.User.Nicename}}</span>
+						<p>{{.User.ShortDescription 140}}...</p>
+					</li>
+				{{end}}
+				</ul>
+			</div>
+		</div>
+		<div class="col s3">
+			<div class="row">
+				<div class="label">
+					Start Date
+				</div>
+				<div class="value">
+					<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="label">
+					End Date
+				</div>
+				<div class="value">
+					<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="label">
+					DaysLeft
+				</div>
+				<div class="value">
+				{{if .Ended}}
+					<h3 class="ui header">Ended</h3>
+				{{else if .Started}}
+					{{.DaysLeft}}
+				{{else}}
+					<h3 class="ui header">Not Yet Started</h3>
+				{{end}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="label">
+					Supports
+				</div>
+				<div class="value">
+					<h3 class="ui header">{{.Supports}}</h3>
 				</div>
 			</div>
 		</div>

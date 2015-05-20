@@ -1,9 +1,42 @@
 {{define "project_tab_content_tasks"}}
 	{{with .Project}}
-	<div class="ui bottom attached active tab" data-tab="tasks">
-		<div class="ui vertically padded grid">
-			<div class="column">
-				<h1>Tasks</h1>
+	<div id="tasks" class="col s12">
+		<div id="sticky-context" class="ui segment">
+			<div class="ui vertically padded grid">
+				<div class="column">
+					<h1>Tasks</h1>
+				</div>
+			</div>
+			<div class="right ui rail">
+				<div class="ui sticky four wide column">
+					<div class="row">
+						<div class="label">
+							Total Tasks
+						</div>
+						<div class="value">
+							<h3 class="ui header">133</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="label">
+							Tasks Remaining
+						</div>
+						<div class="value">
+							<h3 class="ui header">81</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="label">
+							Tasks Done
+						</div>
+						<div class="value">
+							<h3 class="ui header">52</h3>
+						</div>
+					</div>
+					<div class="row">
+						<a class="ui red button" href="#">Create Task</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

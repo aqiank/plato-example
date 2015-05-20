@@ -1,77 +1,65 @@
 {{define "modal-sign-up"}}
-        <form class="ui modal" id="form-sign-up" action="/signup" method="POST">
-                <i class="close icon"></i>
-                <div class="header">
-                        Sign Up
+        <form class="modal" id="form-sign-up" action="/signup" method="POST">
+                <div class="modal-content">
+                        <h4>Sign Up</h4>
+			<div class="row">
+				<div class="input-field col s12">
+					<input id="sign-up-email" type="email" name="email">
+					<label for="sign-up-email">Email</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+                                        <input id="sign-up-password" type="password" name="password">
+					<label for="sign-up-password">Password</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="sign-up-firstname" type="text" name="firstname">
+					<label for="sign-up-firstname">First Name</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="sign-up-lastname" type="text" name="lastname">
+					<label for="sign-up-lastname">Last Name</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<select name="gender">
+						<option value="" disabled selected>What's your gender?</option>
+						<option value="female">Female</option>
+						<option value="male">Male</option>
+						<option value="other">Other</option>
+					</select>
+					<label>Gender</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<select name="nationality">
+						<option value="" disabled selected>What's your nationality?</option>
+						{{range $code, $name := .Countries}}
+						<option value="{{$code}}">{{$name}} {{$code}}</option>
+						{{end}}
+					</select>
+					<label>Nationality</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<select name="profession">
+						<option value="" disabled selected>What's your profession?</option>
+						{{range .Professions}}
+						<option value="{{.}}">{{.}}</option>
+						{{end}}
+					</select>
+					<label>Profession</label>
+				</div>
+			</div>
                 </div>
-                <div class="content">
-                        <div class="ui form">
-                                <h4 class="ui dividing header">Account Information</h4>
-                                <div class="required field">
-                                        <label>Email</label>
-                                        <input type="email" name="email" placeholder="Email">
-                                </div>
-                                <div class="required field">
-                                        <label>Password</label>
-                                        <input type="password" name="password" placeholder="Password">
-                                </div>
-                                <h4 class="ui dividing header">Personal Information</h4>
-                                <div class="two fields">
-                                        <div class="field">
-                                                <label>Name</label>
-                                                <div class="two fields">
-                                                        <div class="field">
-                                                                <input type="text" name="firstname" placeholder="First Name">
-                                                        </div>
-                                                        <div class="field">
-                                                                <input type="text" name="lastname" placeholder="Last Name">
-                                                        </div>
-                                                </div>
-                                        </div>
-                                        <div class="field">
-                                                <label>Gender</label>
-                                                <div class="ui selection dropdown">
-                                                        <input type="hidden" name="gender">
-                                                        <div class="default text">Gender</div>
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu">
-                                                                <div class="item" data-value="female">Female</div>
-                                                                <div class="item" data-value="male">Male</div>
-                                                                <div class="item" data-value="other">Other</div>
-                                                        </div>
-                                                </div>
-
-                                        </div>
-                                </div>
-                                <div class="two fields">
-                                        <div class="field">
-                                                <label>Nationality</label>
-                                                <select name="nationality" class="ui search dropdown">
-                                                        <option value="">State</option>
-                                                        {{range $code, $name := .Countries}}
-                                                        <option value="{{$code}}">{{$name}} {{$code}}</option>
-                                                        {{end}}
-                                                </select>
-                                        </div>
-					<div class="required field">
-						<label>Profession</label>
-						<select name="profession" class="ui search dropdown">
-							<option value="">Choose a profession</option>
-							{{range .Professions}}
-							<option value="{{.}}">{{.}}</option>
-							{{end}}
-						</select>
-					</div>
-                                </div>
-                        </div>
-                </div>
-                <div class="actions">
-                        <div class="ui left floated teal button sign-in">Sign In</div>
-                        <div class="ui left floated google plus button"><i class="google icon"></i>Google</div>
-			<div class="ui left floated facebook button"><i class="facebook icon"></i>Facebook</div>
-			<div class="ui left floated github button"><i class="github icon"></i>Github</div>
-                        <div class="ui black button">Cancel</div>
-                        <button type="submit" class="ui positive right labeled icon submit button">Sign Up</button>
+                <div class="modal-footer">
+                        <button type="submit" class="modal-action btn-flat teal white-text">Sign Up</button>
                 </div>
         </form>
 {{end}}

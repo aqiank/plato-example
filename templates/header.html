@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" media="screen,projection"/>
 
 {{template "pt-head" .}}
 {{range .Includes}}
@@ -13,40 +13,30 @@
 
 </head>
 
-<div id="header">
-	<nav id="nav" class="ui secondary pointing menu page grid">
-		<div class="column">
-			<a class="item" href="/"><h1 class="ui header">O\I</h1></a>
-			{{if .IsLoggedIn}}
-			<a class="item" href="/profile">
-				<span><img class="ui avatar image" src="{{.User.AvatarURL}}"></span>
-				Profile
-			</a>
-			<a class="item" href="/dashboard">
-				<i class="dashboard icon"></i> Dashboard
-			</a>
-			<a class="item" href="/project/new">
-				<i class="plus icon"></i> Create
-			</a>
-			<div class="right menu">
-				<div class="item">
-					<form action="/search" class="ui transparent icon input">
-						<input name="s" type="text" placeholder="Search...">
-						<i class="search link icon"></i>
-					</form>
-				</div>
-				<a class="ui item" href="/logout">Logout</a>
+{{if not .IsLoggedIn}}
+	{{template "modal-sign-in" .}}<!-- #modal-sign-in -->
+	{{template "modal-sign-up" .}}<!-- #modal-sign-up -->
+{{end}}
+
+<nav id="nav" class="red row">
+	<div class="nav-wrapper">
+		<a href="#" class="button-collapse" data-activates="sidebar"><i class="mdi-navigation-menu"></i></a>
+		<a href="/" class="brand-logo" style="margin: 0 16px">OI</a>
+		<ul id="nav-mobile" class="right hide-on-med-and-down" style="position: absolute; right: 0px">
+			<li><a href="/project">Create</a></li>
+			<li><a href="/dashboard">Dashboard</a></li>
+			<li><a href="/profile">Profile</a></li>
+			<li><a href="/logout">Logout</a></li>
+		</ul>
+		<div class="container">
+			<div class="input-field col s10">
+				<input id="search" type="search" required>
+				<label for="search"><i class="mdi-action-search"></i></label>
+				<i class="mdi-navigation-close"></i>
 			</div>
-			{{else}}
-			{{template "modal-sign-in" .}}<!-- #modal-sign-in -->
-			{{template "modal-sign-up" .}}<!-- #modal-sign-up -->
-			<div class="right menu">
-				<a class="ui item sign-in">Login</a>
-			</div>
-			{{end}}
 		</div>
-	</nav>
-</div>
+	</div>
+</nav>
 
 <body>
 

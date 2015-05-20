@@ -1,26 +1,26 @@
 {{define "modal-sign-in"}}
-        <form class="ui modal" id="form-sign-in" action="/login" method="POST">
-                <i class="close icon"></i>
-                <div class="header">
-                        Sign In
-                </div>
-                <div class="content">
-                        <div class="ui form">
-                                <div class="field">
-                                        <input type="email" name="email" placeholder="Email">
+        <form class="modal" id="form-sign-in" action="/login" method="POST">
+                <div class="modal-content">
+                        <h4>Sign In</h4>
+                        <div class="row">
+                                <div class="input-field col s12">
+                                        <input id="sign-in-email" type="email" name="email">
+					<label id="sign-in-email">Email</label>
                                 </div>
-                                <div class="field">
-                                        <input type="password" name="password" placeholder="Password">
+			</div>
+                        <div class="row">
+                                <div class="input-field col s12">
+                                        <input id="sign-in-password" type="password" name="password">
+					<label id="sign-in-password">Password</label>
                                 </div>
                         </div>
                 </div>
-                <div class="actions">
-                        <div class="ui left floated teal button sign-up">Sign Up</div>
-                        <div class="ui left floated google plus button"><i class="google icon"></i>Google</div>
-			<div class="ui left floated facebook button"><i class="facebook icon"></i>Facebook</div>
-			<div class="ui left floated github button"><i class="github icon"></i>Github</div>
-                        <div class="ui black button">Cancel</div>
-                        <button type="submit" class="ui positive right labeled icon submit button">Sign In</button>
-                </div>
+		<div class="modal-footer">
+			<div class="left">
+				<a class="modal-action btn-flat white-text google" href="">Google</a>
+				<a class="modal-action btn-flat white-text facebook" href="">Facebook</a>
+			</div>
+			<button type="submit" class="modal-action btn-flat teal white-text">Sign In</button>
+		</div>
         </form>
 {{end}}

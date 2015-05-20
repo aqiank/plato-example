@@ -1,37 +1,43 @@
-#header { background: #f03030; }
-#nav .header { color: #ffffff; font-weight: bold; }
-#nav .item { color: #ffffff; font-weight: bold; }
-#nav i { color: #ffffff; font-weight: bold; }
-#nav input::-webkit-input-placeholder { color: #ffffff; font-weight: bold; }
-#nav input::-moz-placeholder { color: #ffffff; font-weight: bold; }
-#nav input::-ms-input-placeholder { color: #ffffff; font-weight: bold; }
+/* label color */
+.input-field label {
+	color: #000;
+}
+/* label focus color */
+.input-field input[type=text]:focus + label {
+	color: #000;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+	border-bottom: 1px solid #000;
+	box-shadow: 0 1px 0 0 #000;
+}
+/* valid color */
+.input-field input[type=text].valid {
+	border-bottom: 1px solid #000;
+	box-shadow: 0 1px 0 0 #000;
+}
+/* invalid color */
+.input-field input[type=text].invalid {
+	border-bottom: 1px solid #000;
+	box-shadow: 0 1px 0 0 #000;
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+	color: #000;
+}
 
 .pt-img-input { display: none; }
 .pt-img-preview { cursor: pointer; clear: both; }
 
-.pt-full-width { width: 100% }
-.pt-text-center { text-align: center }
-.pt-full-height { height: 100% }
-
-.pt-valign-wrapper { display: table; height: 100%; width: 100%; }
-.pt-valign { display: table-cell; vertical-align: middle; }
-
-h1.ui.header { font-size: 3.5rem; }
-h2.ui.header { font-size: 1.75rem; }
-h3.ui.header { font-size: 2rem }
-h4.ui.header { font-size: 1.5rem }
-h5.ui.header { font-size: 1.25rem }
-
-#main-container { margin: 0 }
-
-#footer { background: #404040; padding: 3rem 0; }
-#footer a { color: #e0e0e0 }
-#footer h4 { color: #f0f0f0 }
-
-.slick-slider { margin-bottom: 0 }
+.facebook { background: #3b5998 }
+.google { background: #dd4b39 }
 
 .parallax-window { height: 300px; background: transparent; }
-.parallax-window .pt-valign { background: rgba(0,0,0,0.4) }
-.parallax-window .header { display: inline-block; color: rgba(255,255,255,0.9); }
+.parallax-window .valign-wrapper { background: rgba(0,0,0,0.4); height: 100%; }
+.parallax-window .valign { display: inline-block; margin: 0 auto }
+#project-title { display: inline-block; color: rgba(255,255,255,0.9); }
 
-.description { line-height: 1.75em; }
+nav a.button-collapse { margin: 0 16px }
+@media only screen and (min-width: 993px) {
+	nav a.button-collapse { display: block }
+}

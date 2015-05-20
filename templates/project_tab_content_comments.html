@@ -1,7 +1,7 @@
 {{define "project_tab_content_comments"}}
 	{{with .Project}}
-	<div class="ui bottom attached tab" data-tab="comments">
-		<div class="ui comments">
+	<div id="comments" class="col s12">
+		<div class="ui comments segment">
 			<h3 class="ui dividing header">Comments</h3>
 			{{range .Post.Comments}}
 			<div class="comment">

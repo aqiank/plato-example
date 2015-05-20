@@ -1,23 +1,31 @@
 $(document).ready(function() {
         $("#oi-quotes").owlCarousel({
-		singleItem: true,
-		autoPlay: 10000,
-		pagination: false
+		items: 1,
+		autoplay: true,
+		autoplayTimeout: 10000,
+		dots: false,
         });
 
 	$("#oi-recommended-projects").owlCarousel({
-		singleItem: true,
-		autoPlay: 10000
+		items: 1,
+		autoplay: true,
+		autoplayTimeout: 10000,
 	});
 
-	$(".owl-carousel").owlCarousel();
+	$(".oi-projects").owlCarousel({
+		items: 3,
+		autoplay: true,
+		autoplayTimeout: 10000,
 
-	$(".google.plus.button").click(function() {
+	});
+
+	$(".google").click(function(e) {
 		// signInCallback defined in step 6.
 		auth2.grantOfflineAccess({"redirect_uri": "postmessage"}).then(signInCallback);
+		e.preventDefault();
 	});
 
-	$(".facebook.button").click(function() {
+	$(".facebook").click(function(e) {
 		FB.login(function(response) {
 			console.log(response);
 			if (response.status == "connected") {
@@ -34,6 +42,7 @@ $(document).ready(function() {
 				console.log("Failed to sign into Facebook");
 			}
 		}, {scope: "public_profile,email"});
+		e.preventDefault();
 	});
 });
 

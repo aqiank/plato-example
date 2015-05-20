@@ -6,19 +6,4 @@
         height: 500px;
 }
 
-/* Front Cover */
-#oi-front-cover .header { color: white }
-#oi-front-cover a { font-size: 1.25rem; }
-
-/* Quotes */
-#oi-quotes { padding: 50px 0; }
-#oi-quotes .header { color: #606060 }
-
-/* Steps */
-#oi-steps p { font-size: 1.25rem }
-
-/* Recommended Projects */
-#oi-recommended-projects .header { color: #f3f3f3; }
-#oi-recommended-projects .background { width: 100%; height: 500px; background-size: cover; background-position: center; }
-
-#oi-trending-projects, #oi-active-projects { padding-top: 50px; }
+#oi-recommended-projects .background { 100%; height: 500px; background-size: cover; background-position: center; }

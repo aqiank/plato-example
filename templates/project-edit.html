@@ -35,12 +35,16 @@
                                 </div>
                                 <div class="field">
                                         <h4>Requirements</h4>
-                                        <div class="four fields">
-						{{range .Professions}}
-                                                <div class="field range-wrapper">
-                                                        <label data-name="{{.Name}}s">{{.Count}} {{.Name}}s</label>
-                                                        <input name="profession {{.Name}}" type="range" min="0" max="10" value="{{.Count}}">
-                                                </div>
+                                        <div class="four fields pt-text-center">
+						{{range .Requirements}}
+						<div class="field">
+							<p>{{.Name}}</p>
+							<input type="text" class="knob" name="profession {{.Name}}" value="{{.Count}}"
+								data-width="150"
+								data-thickness=".2"
+								data-min="0" 
+								data-max="10" >
+						</div>
 						{{end}}
                                         </div>
                                 </div>

@@ -1,26 +1,24 @@
 {{define "project"}}
-        {{.Include `<link href="/css/style-project.css" rel="stylesheet">`}}
-        {{.Include `<script src="/js/script-project.js"></script>`}}
         {{template "header" .}}
 
 	{{with .Project.ImageURL}}
-	<div class="parallax-window pt-valign-wrapper" data-parallax="scroll" data-image-src="{{.}}">
+	<div class="parallax-window" data-parallax="scroll" data-image-src="{{.}}">
 	{{else}}
-	<div class="parallax-window pt-valign-wrapper" data-parallax="scroll" data-image-src="/img/dummies/project.png">
+	<div class="parallax-window" data-parallax="scroll" data-image-src="/img/dummies/project.png">
 	{{end}}
-		<div class="pt-valign pt-text-center">
-			<h1 id="project-title" class="ui header">{{.Project.Title}}</h1>
+		<div class="valign-wrapper">
+			<div class="valign"><h1 id="project-title">{{.Project.Title}}</h1></div>
 		</div>
 	</div>
 
-	<div class="ui vertical padded page grid">
-		<div class="twelve wide column">
-			<div class="ui top attached tabular menu">
-				<a class="active item" data-tab="info">Info</a>
-				{{if (call $.IsMember .Project.PostID .User.ID)}}
-				<a class="item" data-tab="tasks">Tasks</a>
-				{{end}}
-				<a class="item" data-tab="comments">Comments</a>
+	<div class="row">
+		<div class="container">
+			<div class="col s12">
+				<ul class="tabs">
+					<li class="tab col s4"><a href="#info" class="active">Info</a></li>
+					<li class="tab col s4"><a href="#tasks">Tasks</a></li>
+					<li class="tab col s4"><a href="#comments">Comments</a></li>
+				</ul>
 			</div>
 			{{template "project_tab_content_info" .}}
 
@@ -43,6 +41,8 @@
 			});
 		});
 	</script>
+
+	<!-- <a class ="ui primary button" href="/project?postID={{.PostID}}&method=apply&role={{.Name}}">Apply</a> -->
 
         {{template "footer" .}}
 {{end}}
