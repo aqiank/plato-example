@@ -11,34 +11,49 @@
 			</div>
 			<div class="ui vertically padded grid">
 				<div class="column">
-					<h4 class="ui header">Members</h4>
-					<div class="ui items">
-					{{range .Members}}
-						<div class="item">
-							<a class="ui tiny image"><img src="{{.AvatarURL}}"></a>
-							<div class="content">
-								<a class="header">{{.Nicename}}</a>
-								<div class="description">
-									{{.ShortDescription 140}}...
+					<h4 class="ui header">Requirements</h4>
+					<div class="ui four columns grid">
+						{{$joined := .JoinedBy $.User.ID}}
+						{{$applied := .AppliedBy $.User.ID}}
+						{{range .Requirements}}
+						<div class="column dimmable">
+							<div class="ui dimmer dimmer-requirement">
+								<div class="content">
+									<div class="center">
+										<h2 class="ui inverted header">{{.Name}}</h2>
+										{{if not (or ($applied) ($joined))}}
+										<a class ="ui primary button" href="/project?postID={{.PostID}}&method=apply&role={{.Name}}">Apply</a>
+										{{end}}
+									</div>
 								</div>
 							</div>
+							<input type="text" class="knob" value="{{$.Project.FilledRequirement .Name}}"
+								data-fgColor="#222222"
+								data-skin="tron"
+								data-thickness=".2"
+								data-readOnly="true"
+								data-min="0" 
+								data-max="{{$.Project.NeededRequirement .Name}}" >
 						</div>
-					{{end}}
+						{{end}}
 					</div>
 				</div>
 			</div>
 			<div class="ui vertically padded grid">
 				<div class="column">
-					<h4 class="ui header">Requirements</h4>
-					<div class="ui two columns grid">
-						{{range .Professions}}
-						<div class="column">
-							<div class="ui teal progress" data-percent="{{$.Project.ProfessionProgress .Name}}">
-								<div class="bar"></div>
-								<div class="label">{{$.Project.FilledProfession .Name}} / {{$.Project.NeededProfession .Name}} {{.Name}}</div>
+					<h4 class="ui header">Members</h4>
+					<div class="ui items">
+					{{range .Members}}
+						<div class="item">
+							<a class="ui tiny image"><img src="{{.User.AvatarURL}}"></a>
+							<div class="content">
+								<a class="header">{{.User.Nicename}}</a>
+								<div class="description">
+									{{.User.ShortDescription 140}}...
+								</div>
 							</div>
 						</div>
-						{{end}}
+					{{end}}
 					</div>
 				</div>
 			</div>
@@ -89,15 +104,6 @@
 						<div class="column">
 							<a class="ui red button" {{if not (.SupportedBy $.User.ID)}} href="/project?postID={{.PostID}}&method=support" {{end}}>
 								Support{{if .SupportedBy $.User.ID}}ed{{end}}
-							</a>
-							<a class="ui teal button" {{if not (or (.AppliedBy $.User.ID) (.JoinedBy $.User.ID))}} href="/project?postID={{.PostID}}&method=apply" {{end}}>
-								{{if .JoinedBy $.User.ID}}
-								Joined
-								{{else if .AppliedBy $.User.ID}}
-								Applied
-								{{else}}
-								Apply
-								{{end}}
 							</a>
 						</div>
 					</div>

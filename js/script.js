@@ -64,7 +64,10 @@ $(document).ready(function() {
         $(".datepicker").pickadate();
 
 	// dimmer
-	$(".dimmer-image").dimmer({on: "hover"});
+	$(".dimmer-requirement").dimmer({on: "hover"});
+
+	// knob
+	$(".knob").knob();
 
 	// owl carousel
 	$(".owl-carousel").owlCarousel({

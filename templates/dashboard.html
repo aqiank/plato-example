@@ -94,7 +94,7 @@
 				<div class="sixteen wide column">
 					<h4 class="ui header">Applicants</h4>
 					<div class="ui cards">
-						{{range call .GetApplicants .User.ID}}
+						{{range call .GetMembersOfProjectsBy .User.ID "pending"}}
 						<div class="card">
 							<a class="image">
 								<img src="{{.User.AvatarURL}}">
@@ -110,6 +110,8 @@
 							</div>
 							<div class="extra content">
 								<a href="/profile/{{.UserID}}">View Profile</a>
+								<a href="/project?method=accept&postID={{.PostID}}&applicantUserID={{.UserID}}">Accept</a>
+								<a href="/project?method=decline&postID={{.PostID}}&applicantUserID={{.UserID}}">Decline</a>
 							</div>
 						</div>
 						{{else}}

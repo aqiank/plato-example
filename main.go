@@ -33,14 +33,15 @@ func main() {
 
 	// Demonstrate service
 	service.AttachAll(service.Service{
-		"Quotes":                quotes,
-		"Countries":             countries,
-		"Professions":           professions,
-		"RecommendedProjects":   recommendedProjects,
-		"LatestRelatedProjects": latestRelatedProjects,
-		"GetProject":            getProject,
-		"GetApplicants":         getApplicants,
-		"TimelinePath":          timelinePath,
+		"Quotes":                 quotes,
+		"Countries":              countries,
+		"Professions":            professions,
+		"RecommendedProjects":    recommendedProjects,
+		"LatestRelatedProjects":  latestRelatedProjects,
+		"GetProject":             getProject,
+		"GetMembersOfProjectsBy": getMembersOfProjectsBy,
+		"TimelinePath":           timelinePath,
+		"IsMember":               isMember,
 	})
 
 	log.Println("starting plato-example..")

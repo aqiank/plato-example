@@ -2,12 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
+	"log"
 	"net/http"
-	"os"
 	"path"
 	"strconv"
-	"strings"
 	"time"
 
 	"plato/db"
@@ -20,8 +20,11 @@ import (
 	"plato/server/session"
 )
 
+var (
+	ErrNotAuthor = errors.New("user is not the author")
+)
+
 const (
-	// project
 	createProjectTableSQL = `post_id INTEGER NOT NULL,
 				 tagline TEXT NOT NULL,
 				 status TEXT NOT NULL,
@@ -49,28 +52,10 @@ const (
 				  WHERE recommended = 1 ORDER BY datetime(created_at) DESC LIMIT ?`
 
 	latestRelatedProjectsSQL = `SELECT project.* FROM project
-				    INNER JOIN profession ON project.post_id = profession.post_id
+				    INNER JOIN requirement ON project.post_id = requirement.post_id
 				    INNER JOIN pt_post ON project.post_id = pt_post.id
-				    WHERE profession.name = ?
+				    WHERE requirement.name = ?
 				    ORDER BY datetime(pt_post.created_at) DESC LIMIT ?`
-
-	projectMembersSQL = `SELECT pt_user.* FROM pt_user INNER JOIN pt_post_meta
-			     ON pt_user.id = pt_post_meta.value
-			     WHERE pt_post_meta.key = "join" AND pt_post_meta.post_id = ?`
-
-	// profession
-	createProfessionTableSQL = `post_id INTEGER NOT NULL,
-				    name TEXT NOT NULL,
-				    count INTEGER NOT NULL`
-
-	insertProfessionSQL = `INSERT INTO profession (post_id, name, count)
-			       VALUES (?, ?, ?)`
-
-	updateProfessionSQL = `UPDATE profession SET count = ? WHERE post_id = ? AND name = ?`
-
-	getProfessionSQL = `SELECT * FROM profession WHERE post_id = ?`
-
-	neededProfessionSQL = `SELECT count FROM profession WHERE post_id = ? AND name = ?`
 )
 
 type Project interface {
@@ -88,11 +73,11 @@ type Project interface {
 	DaysLeft() int
 	Started() bool
 	Ended() bool
-	Members() []entity.User
-	FilledProfession(string) int64
-	NeededProfession(string) int64
-	ProfessionProgress(string) int64
-	Professions() []Profession
+	Members() []Member
+	FilledRequirement(string) int64
+	NeededRequirement(string) int64
+	RequirementProgress(string) int64
+	Requirements() []Requirement
 	SupportedBy(int64) bool
 	AppliedBy(int64) bool
 	JoinedBy(int64) bool
@@ -107,13 +92,13 @@ type project struct {
 	recommended bool
 	startDate   time.Time
 	endDate     time.Time
-	members     []entity.User
+	members     []Member
 }
 
-type Profession struct {
-	PostID int64
-	Name   string
-	Count  int64
+func init() {
+	if err := db.CreateTable("project", createProjectTableSQL); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (p project) Post() entity.Post {
@@ -172,23 +157,15 @@ func (p project) Ended() bool {
 	return time.Since(p.endDate) >= 0
 }
 
-func (p project) Members() []entity.User {
-	if p.members == nil {
-		p.members = db.QueryUsers(projectMembersSQL, p.postID)
-	}
-	return p.members
+func (p project) Members() []Member {
+	return getMembers(p.postID, "accepted")
 }
 
-func (p project) FilledProfession(profession string) int64 {
+func (p project) FilledRequirement(profession string) int64 {
 	var count int64
 
-	if p.members == nil {
-		p.Members()
-	}
-
-	for _, member := range p.members {
-		println(member.Profession() == profession)
-		if member.Profession() == profession {
+	for _, member := range p.Members() {
+		if member.Role == profession {
 			count++
 		}
 	}
@@ -196,28 +173,28 @@ func (p project) FilledProfession(profession string) int64 {
 	return count
 }
 
-func (p project) NeededProfession(profession string) int64 {
+func (p project) NeededRequirement(profession string) int64 {
 	var count int64
-	if err := db.QueryRow(neededProfessionSQL, p.postID, profession).Scan(&count); err != nil {
+	if err := db.QueryRow(neededRequirementSQL, p.postID, profession).Scan(&count); err != nil {
 		debug.Warn(err)
 		return 0
 	}
 	return count
 }
 
-func (p project) ProfessionProgress(profession string) int64 {
-	fp := p.FilledProfession(profession)
-	np := p.NeededProfession(profession)
+func (p project) RequirementProgress(profession string) int64 {
+	fp := p.FilledRequirement(profession)
+	np := p.NeededRequirement(profession)
 	if np <= 0 {
 		return 100
 	}
 	return fp * 100 / np
 }
 
-func (p project) Professions() []Profession {
-	var ps []Profession
+func (p project) Requirements() []Requirement {
+	var ps []Requirement
 
-	rows, err := db.Query(getProfessionSQL, p.postID)
+	rows, err := db.Query(getRequirementSQL, p.postID)
 	if err != nil {
 		debug.Warn(err)
 		return nil
@@ -225,7 +202,7 @@ func (p project) Professions() []Profession {
 	defer rows.Close()
 
 	for rows.Next() {
-		var p Profession
+		var p Requirement
 		if rows.Scan(
 			&p.PostID,
 			&p.Name,
@@ -308,16 +285,6 @@ func getProjectsByAuthorID(authorID int64) []Project {
 	return queryProjects(getProjectsByAuthorIDSQL, authorID)
 }
 
-func init() {
-	db := db.Instance()
-
-	db.CreateTable("project", createProjectTableSQL)
-	db.CreateTable("profession", createProfessionTableSQL)
-	if db.Err != nil {
-		os.Exit(1)
-	}
-}
-
 func recommendedProjects(n int) []Project {
 	return queryProjects(recommendedProjectsSQL, n)
 }
@@ -394,7 +361,7 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 	user := session.User(r)
 	if !session.IsLoggedIn(user) {
 		http.Redirect(w, r, "/", 302)
-		return nil, nil
+		return nil, api.ErrNotLoggedIn
 	}
 
 	postIDStr := r.FormValue("postID")
@@ -407,15 +374,26 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 		http.Redirect(w, r, "/project/"+postIDStr, 302)
 		return postID, nil
 	case "apply":
-		applyProject(postID, user.ID())
+		role := r.FormValue("role")
+		applyProject(postID, user.ID(), role)
 		http.Redirect(w, r, "/project/"+postIDStr, 302)
 		return postID, nil
-	case "accept":
+	case "accept", "decline":
 		if !db.IsAuthor(postID, user.ID()) {
-			return postID, nil
+			return postID, ErrNotAuthor
 		}
-		joinProject(postID, r.FormValue("userID"))
-		http.Redirect(w, r, "/project/"+postIDStr, 302)
+
+		applicantUserID, err := strconv.ParseInt(r.FormValue("applicantUserID"), 10, 0)
+		if err != nil {
+			return postID, ErrNotAuthor
+		}
+
+		if method == "accept" {
+			joinProject(postID, applicantUserID)
+		} else if method == "decline" {
+			deleteMember(postID, applicantUserID)
+		}
+		http.Redirect(w, r, "/dashboard", 302)
 		return postID, nil
 	}
 
@@ -442,7 +420,7 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 		if id, err = insertProject(postID, tagline, status, imageURL, startDate, endDate); err != nil {
 			return nil, debug.Error(err)
 		}
-		if err = insertProfession(id, r); err != nil {
+		if err = insertRequirement(id, r); err != nil {
 			return nil, debug.Error(err)
 		}
 		if _, err = db.InsertActivity(user.ID(), postID, "create project"); err != nil {
@@ -451,13 +429,13 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 
 		// generate timeline
 		generateTimeline(user)
-		joinProject(postID, strconv.FormatInt(user.ID(), 10))
+		joinProject(postID, user.ID())
 		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/", postID), 302)
 	case "PUT":
 		if err = updateProject(postID, tagline, status, imageURL, startDate, endDate); err != nil {
 			return nil, debug.Error(err)
 		}
-		if err = updateProfession(postID, r); err != nil {
+		if err = updateRequirement(postID, r); err != nil {
 			return nil, debug.Error(err)
 		}
 		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/edit/", postID), 302)
@@ -480,59 +458,6 @@ func editProjectPageHandler(w http.ResponseWriter, r *http.Request) error {
 	p := getProject(id)
 	return page.Serve(w, r, "project-edit", service.Service{"Project": p})
 }
-
-func insertProfession(postID int64, r *http.Request) error {
-	for k, v := range r.Form {
-		if len(v) == 0 || !strings.Contains(k, "profession") {
-			continue
-		}
-
-		// check if there's space character
-		idx := strings.IndexRune(k, ' ')
-		if idx == -1 || idx+1 >= len(k) {
-			continue
-		}
-		idx++
-
-		cnt, err := strconv.ParseInt(v[0], 10, 0)
-		if err != nil {
-			return debug.Error(err)
-		}
-
-		if _, err = db.Exec(insertProfessionSQL, postID, k[idx:], cnt); err != nil {
-			return debug.Error(err)
-		}
-	}
-
-	return nil
-}
-
-func updateProfession(postID int64, r *http.Request) error {
-	for k, v := range r.Form {
-		if len(v) == 0 || !strings.Contains(k, "profession") {
-			continue
-		}
-
-		// check if there's space character
-		idx := strings.IndexRune(k, ' ')
-		if idx == -1 || idx+1 >= len(k) {
-			continue
-		}
-		idx++
-
-		cnt, err := strconv.ParseInt(v[0], 10, 0)
-		if err != nil {
-			return debug.Error(err)
-		}
-
-		if _, err = db.Exec(updateProfessionSQL, cnt, postID, k[idx:]); err != nil {
-			return debug.Error(err)
-		}
-	}
-
-	return nil
-}
-
 func onComment(w http.ResponseWriter, r *http.Request, data interface{}) (interface{}, error) {
 	id, ok := data.(int64)
 	if !ok {
@@ -543,36 +468,6 @@ func onComment(w http.ResponseWriter, r *http.Request, data interface{}) (interf
 	url := fmt.Sprintf("/project/%d", id)
 	http.Redirect(w, r, url, 302)
 	return id, nil
-}
-
-func supportProject(postID, authorID int64) {
-	if err := db.UpdateMeta("post", postID, "support", strconv.FormatInt(authorID, 10)); err != nil {
-		debug.Warn(err)
-	}
-}
-
-func applyProject(postID, authorID int64) {
-	if err := db.UpdateMeta("post", postID, "apply", strconv.FormatInt(authorID, 10)); err != nil {
-		debug.Warn(err)
-	}
-}
-
-func joinProject(postID int64, userID string) {
-	if err := db.UpdateMeta("post", postID, "join", userID); err != nil {
-		debug.Warn(err)
-	}
-}
-
-func supportedProject(postID, authorID int64) bool {
-	return db.HasMeta("post", postID, "support", strconv.FormatInt(authorID, 10))
-}
-
-func appliedProject(postID, authorID int64) bool {
-	return db.HasMeta("post", postID, "apply", strconv.FormatInt(authorID, 10))
-}
-
-func joinedProject(postID, authorID int64) bool {
-	return db.HasMeta("post", postID, "join", strconv.FormatInt(authorID, 10))
 }
 
 func handleProject() {

@@ -17,9 +17,17 @@
 		<div class="twelve wide column">
 			<div class="ui top attached tabular menu">
 				<a class="active item" data-tab="info">Info</a>
+				{{if (call $.IsMember .Project.PostID .User.ID)}}
+				<a class="item" data-tab="tasks">Tasks</a>
+				{{end}}
 				<a class="item" data-tab="comments">Comments</a>
 			</div>
 			{{template "project_tab_content_info" .}}
+
+			{{if call $.IsMember .Project.PostID .User.ID}}
+			{{template "project_tab_content_tasks" .}}
+			{{end}}
+
 			{{template "project_tab_content_comments" .}}
 		</div>
 	</div>
