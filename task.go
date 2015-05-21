@@ -31,6 +31,9 @@ const (
 	insertTaskSQL = `INSERT INTO task (parent_id, user_id, source_id, title, description, start_date, end_date, done, is_milestone, restricted, created_at)
 			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT datetime("now")))`
 
+	updateTaskSQL = `UPDATE task SET title = ?, description = ?, start_date = ?, end_date = ?, done = ?, is_milestone = ?, restricted = ?
+			 WHERE id = ?`
+
 	getTasksSQL = `SELECT * FROM task WHERE source_id = ? AND parent_id = 0`
 	getTaskChildrenSQL = `SELECT * FROM task WHERE parent_id = ?`
 
@@ -65,6 +68,13 @@ func init() {
 
 func insertTask(parentID, userID, sourceID int64, title, description string, startDate, endDate time.Time, done, isMilestone, restricted bool) error {
 	if _, err := db.Exec(insertTaskSQL, parentID, userID, sourceID, title, description, startDate, endDate, done, isMilestone, restricted); err != nil {
+		return debug.Error(err)
+	}
+	return nil
+}
+
+func updateTask(taskID int64, title, description string, startDate, endDate time.Time, done, isMilestone, restricted bool) error {
+	if _, err := db.Exec(updateTaskSQL, title, description, startDate, endDate, done, isMilestone, restricted, taskID); err != nil {
 		return debug.Error(err)
 	}
 	return nil
@@ -181,11 +191,24 @@ func taskHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) (in
 
 		title := r.FormValue("title")
 		description := r.FormValue("description")
-		isMilestone := r.FormValue("isMilestone") == "true"
-		restricted := r.FormValue("restricted") == "true"
+		isMilestone := r.FormValue("isMilestone") == "on"
+		restricted := r.FormValue("restricted") == "on"
+		done := r.FormValue("isDone") == "on"
 
-		if err := insertTask(0, user.ID(), postID, title, description, startDate, endDate, false, isMilestone, restricted); err != nil {
-			return nil, debug.Error(err)
+		taskIDStr := r.FormValue("taskID")
+		if taskIDStr == "" {
+			if err := insertTask(0, user.ID(), postID, title, description, startDate, endDate, false, isMilestone, restricted); err != nil {
+				return nil, debug.Error(err)
+			}
+		} else {
+			taskID, err := strconv.ParseInt(taskIDStr, 10, 0)
+			if err != nil {
+				return nil, debug.Error(err)
+			}
+
+			if err := updateTask(taskID, title, description, startDate, endDate, done, isMilestone, restricted); err != nil {
+				return nil, debug.Error(err)
+			}
 		}
 	default:
 		http.Redirect(w, r, "/", 302)

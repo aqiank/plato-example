@@ -47,7 +47,7 @@ nav a.button-collapse { margin: 0 16px }
 
 .brand-logo { margin: 0 16px }
 
-#nav { margin-bottom: 0 }
+.row { margin-bottom: 0 }
 
 #notifications-dropdown img { width: 48px; height: 48px; }
 #notifications-dropdown a { font-size: 1rem; display: inline; padding: 0 }

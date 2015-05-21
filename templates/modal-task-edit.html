@@ -5,14 +5,14 @@
                         <h4>Edit Task</h4>
                         <div class="row">
                                 <div class="input-field col s12">
-                                        <input id="task-edit--title" type="text" name="title">
-					<label for="task-edit--title">Title</label>
+                                        <input id="task-edit-title" type="text" name="title">
+					<label for="task-edit-title">Title</label>
                                 </div>
 			</div>
                         <div class="row">
                                 <div class="input-field col s12">
-                                        <textarea id="task-edit--description" type="text" name="description" class="materialize-textarea"></textarea>
-					<label for="task-edit--description">Description</label>
+                                        <textarea id="task-edit-description" type="text" name="description" class="materialize-textarea"></textarea>
+					<label for="task-edit-description">Description</label>
                                 </div>
 			</div>
 			<div class="row">
@@ -26,17 +26,21 @@
 				</div>
 			</div>
 			<p>
-				<input id="task-edit-is-milestone" type="checkbox" name="isMilestone" value="true" class="filled-in">
+				<input id="task-edit-is-milestone" type="checkbox" name="isMilestone" class="filled-in">
 				<label for="task-edit-is-milestone">Is Milestone?</label>
 			</p>
 			<p>
-				<input id="task-edit-restricted" type="checkbox" name="restricted" value="true" class="filled-in">
+				<input id="task-edit-restricted" type="checkbox" name="restricted" class="filled-in">
 				<label for="task-edit-restricted">Restricted</label>
+			</p>
+			<p>
+				<input id="task-edit-done" type="checkbox" name="isDone" class="filled-in">
+				<label for="task-edit-done">Done</label>
 			</p>
                 </div>
 		<div class="modal-footer">
 			<input type="hidden" name="postID" value="{{.Project.PostID}}">
-			<input type="hidden" name="taskID">
+			<input id="task-edit-id" type="hidden" name="taskID">
 			<button type="submit" class="modal-action btn-flat teal white-text">Submit</button>
 		</div>
         </form>

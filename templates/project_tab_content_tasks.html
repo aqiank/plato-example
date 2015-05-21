@@ -10,9 +10,18 @@
 		<div class="col s9">
 			<ul class="collection">
 				{{range $tasks}}
-				<a class="modal-trigger task-edit-trigger" href="#modal-task-edit" data-taskID="{{.ID}}">
-					<li class="collection-item">
-						{{.Title}}<small class="right">by {{.User.Nicename}}</small>
+				<a class="modal-trigger task-edit-trigger" href="#modal-task-edit" data-id="{{.ID}}"
+												   data-title="{{.Title}}"
+												   data-description="{{.Description}}"
+												   data-startdate="{{.StartDate.Format "2 January, 2006"}}"
+												   data-enddate="{{.EndDate.Format "2 January, 2006"}}"
+												   data-ismilestone="{{.IsMilestone}}"
+												   data-restricted="{{.Restricted}}"
+												   data-done="{{.Done}}">
+					<li class="collection-item grey-text text-darken-4">
+						{{.Title}}
+						{{if .IsMilestone}}<i class="mdi-content-flag red-text"></i>{{end}}
+						{{if .Done}}<i class="right mdi-action-done green-text"></i>{{end}}
 					</li>
 				</a>
 				{{end}}
@@ -37,7 +46,11 @@
 				<p>Done</p>
 				<input type="text" class="knob" value="{{len .DoneTasks}}"
 					data-width="150"
+					{{if eq (len $tasks) (len .DoneTasks)}}
+					data-fgColor="#339933"
+					{{else}}
 					data-fgColor="#333333"
+					{{end}}
 					data-thickness=".2"
 					data-max="{{len $tasks}}"
 					data-readOnly="true" >
