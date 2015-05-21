@@ -12,13 +12,6 @@ $(document).ready(function() {
 		autoplayTimeout: 10000,
 	});
 
-	$(".oi-projects").owlCarousel({
-		items: 3,
-		autoplay: true,
-		autoplayTimeout: 10000,
-
-	});
-
 	$(".google").click(function(e) {
 		// signInCallback defined in step 6.
 		auth2.grantOfflineAccess({"redirect_uri": "postmessage"}).then(signInCallback);

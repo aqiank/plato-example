@@ -2,54 +2,27 @@
         {{.Include `<script src="/js/script-profile.js"></script>`}}
         {{template "header" .}}
 
-	<div class="ui vertical padded page grid">
+	<div class="container">
 		<div class="row">
-			<div class="ui segment column">
-				<h3 class="ui header">Profile</h3>
-				<div class="ui items">
-					<div class="item">
-						<label class="image">
-							<input id="avatar-input" class="pt-img-input" name="profilePicture" multiple="false" accept="image/*" type="file" />
-							{{with .User.AvatarURL}}
-							<img id="avatar-preview" class="pt-img-preview" src="{{.}}">
-							{{else}}
-							<img id="avatar-preview" class="pt-img-preview" src="/img/large/avatar.png">
-							{{end}}
-						</label>
-						<div class="content">
-							<h1 id="fullname" class="ui header">{{.User.Nicename}}</h1>
-							<div class="meta">
-								<span id="profession" class="date">{{.User.Profession}}</span>
-							</div>
-							<div id="description" class="description">{{.HTML .User.Description}}</div>
-						</div>
-					</div>
+			<div class="col s12">
+				<h5>Profile</h5>
+				<div class="col s3">
+					<input id="avatar-input" class="pt-img-input" name="profilePicture" multiple="false" accept="image/*" type="file" />
+					<img id="avatar-preview" class="pt-img-preview" src="{{.User.AvatarURL}}" style="width: 184px; height: 184x">
+				</div>
+				<div class="col s9">
+					<h5 id="fullname">{{.User.Nicename}}</h5>
+					<small id="profession">{{.User.Profession}}</small>
+					<div id="description" class="description">{{.HTML .User.Description}}</div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="ui segment column">
-				<h3 class="ui header">Involved Projects</h3>
-				<div class="ui cards">
+			<div class="col s12">
+				<h5>Involved Projects</h5>
+				<div class="oi-projects row">
 				{{range call .RecommendedProjects 3}}
-					<div class="card">
-						<a class="image">
-							{{with .ImageURL}}
-							<img src="{{.}}">
-							{{else}}
-							<img src="/img/dummies/project.png">
-							{{end}}
-						</a>
-						<div class="content">
-							<a class="header">{{.Title}}</a>
-							<div class="meta">
-								Project
-							</div>
-							<div class="description">
-								{{.ShortContent 140}}
-							</div>
-						</div>
-					</div>
+					{{template "project-card" .}}
 				{{end}}
 				</div>
 			</div>

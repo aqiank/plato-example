@@ -14,8 +14,8 @@
 </head>
 
 {{if not .IsLoggedIn}}
-	{{template "modal-sign-in" .}}<!-- #modal-sign-in -->
-	{{template "modal-sign-up" .}}<!-- #modal-sign-up -->
+	{{template "modal-sign-in" .}}
+	{{template "modal-sign-up" .}}
 {{end}}
 
 <nav id="nav" class="red row">
@@ -25,19 +25,21 @@
 		<a href="/" class="brand-logo hide-on-med-and-down">OI</a>
 		<ul class="right hide-on-med-and-down" style="position: absolute; right: 0px">
 			<li><a href="/project/new"><i class="mdi-content-create"></i></a></li>
-			<li><a href="#" class="dropdown-button" data-activates="notifications-dropdown"><i class="mdi-social-notifications"></i></a></li>
+			<li><a href="#" class="dropdown-button" data-activates="notifications-dropdown"><i class="small mdi-social-notifications"></i></a></li>
 			<li style="height: 64px">
 				<a href="#" class="dropdown-button valign-wrapper" style="height: 100%" data-activates="profile-dropdown">
 					<img src="{{.User.AvatarURL}}" class="circle responsive-img valign" style="width: 48px; height: 48px">
 				</a>
 			</li>
 		</ul>
+
 		<ul id="sidebar" class="side-nav">
 			<li><a href="/project/new">Create</a></li>
 			<li><a href="/dashboard">Dashboard</a></li>
 			<li><a href="/profile">Profile</a></li>
 			<li><a href="/logout">Logout</a></li>
-		</ul>
+		</ul><!-- #sidebar -->
+
 		<ul id="notifications-dropdown" class="dropdown-content collection" style="z-index: 1000">
 			{{range .GetActivities .User.ID}}
 			<li class="collection-item">
@@ -47,28 +49,31 @@
 			{{else}}
 			<li class="collection-item">No activities!</li>
 			{{end}}
-		</ul>
+		</ul><!-- notifications-dropdown -->
+
 		<ul id="profile-dropdown" class="dropdown-content" style="z-index: 1000">
 			<li><a href="/dashboard">Dashboard</a></li>
 			<li><a href="/profile">Profile</a></li>
 			<li><a href="/logout">Logout</a></li>
-		</ul>
+		</ul><!-- #profile-dropdown -->
+
 		<div class="container" style="height: 100%">
-			<div style="width: 100%; height: 100%; padding: 8px">
+			<form action="/search" style="width: 100%; height: 100%; padding: 8px">
 				<div class="input-field col s12" style="height: 100%; padding: 0; line-height: 52px; background-color: rgba(255,255,255,0.25)">
-					<input id="search" type="search" placeholder="Search" required>
+					<input id="search" type="search" name="s" placeholder="Search" required>
 					<label for="search" style="height: 100%"><i class="mdi-action-search" style="height: 100%; line-height: 52px"></i></label>
 					<i class="mdi-navigation-close" style="line-height: 52px"></i>
 				</div>
-			</div>
+			</form>
 		</div>
+
 		{{else}}
 		<a href="/" class="brand-logo hide-on-med-and-down">OI</a>
 		<ul class="right hide-on-med-and-down" style="position: absolute; right: 0px">
 			<li><a href="#modal-sign-in" class="modal-trigger">Sign In</a></li>
 		</ul>
 		{{end}}
-	</div>
+	</div><!-- .nav-wrapper -->
 </nav>
 
 <body>

@@ -29,6 +29,8 @@
 .pt-img-input { display: none; }
 .pt-img-preview { cursor: pointer; clear: both; }
 
+.fill { width: 100%; height: 100% }
+
 .facebook { background: #3b5998 }
 .google { background: #dd4b39 }
 
@@ -54,5 +56,5 @@ nav a.button-collapse { margin: 0 16px }
 ::-moz-placeholder { color: white }
 ::-ms-input-placeholder { color: white }
 
-#search:hover { background: rgba(255,255,255,0.3) }
+#search:hover { background: rgba(255,255,255,0.25) }
 #search:focus:hover { background: white }

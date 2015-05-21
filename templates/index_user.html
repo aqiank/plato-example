@@ -16,9 +16,7 @@
 
 	<div id="oi-trending-projects" class="row">
 		<div class="container">
-			<div class="row">
-				<h3 class="center-align">Trending Projects</h3>
-			</div>
+			<h3 class="center-align grey-text text-darken-2">Trending Projects</h3>
 			<div class="oi-projects row">
 				{{range call .RecommendedProjects 6}}
 					{{template "project-card" .}}
@@ -29,9 +27,7 @@
 
 	<div id="oi-active-projects" class="row">
 		<div class="container">
-			<div class="row">
-				<h3 class="center-align">Most Active Projects</h3>
-			</div>
+			<h3 class="center-align grey-text text-darken-2">Most Active Projects</h3>
 			<div class="oi-projects row">
 				{{range call .RecommendedProjects 6}}
 					{{template "project-card" .}}

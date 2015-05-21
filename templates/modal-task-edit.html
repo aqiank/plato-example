@@ -1,0 +1,44 @@
+{{define "modal-task-edit"}}
+
+        <form class="modal" id="modal-task-edit" action="/task" method="POST">
+                <div class="modal-content">
+                        <h4>Edit Task</h4>
+                        <div class="row">
+                                <div class="input-field col s12">
+                                        <input id="task-edit--title" type="text" name="title">
+					<label for="task-edit--title">Title</label>
+                                </div>
+			</div>
+                        <div class="row">
+                                <div class="input-field col s12">
+                                        <textarea id="task-edit--description" type="text" name="description" class="materialize-textarea"></textarea>
+					<label for="task-edit--description">Description</label>
+                                </div>
+			</div>
+			<div class="row">
+				<div class="col s6">
+					<input id="task-edit-start-date" type="date" name="startDate" class="datepicker">
+					<label for="task-edit-start-date">Start Date</label>
+				</div>
+				<div class="col s6">
+					<input id="task-edit-end-date" type="date" name="endDate" class="datepicker">
+					<label for="task-edit-end-date">End Date</label>
+				</div>
+			</div>
+			<p>
+				<input id="task-edit-is-milestone" type="checkbox" name="isMilestone" value="true" class="filled-in">
+				<label for="task-edit-is-milestone">Is Milestone?</label>
+			</p>
+			<p>
+				<input id="task-edit-restricted" type="checkbox" name="restricted" value="true" class="filled-in">
+				<label for="task-edit-restricted">Restricted</label>
+			</p>
+                </div>
+		<div class="modal-footer">
+			<input type="hidden" name="postID" value="{{.Project.PostID}}">
+			<input type="hidden" name="taskID">
+			<button type="submit" class="modal-action btn-flat teal white-text">Submit</button>
+		</div>
+        </form>
+
+{{end}}

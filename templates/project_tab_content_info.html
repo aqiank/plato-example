@@ -1,9 +1,9 @@
 {{define "project_tab_content_info"}}
 	{{with .Project}}
 	<div id="info" class="col s12">
+		<h3>{{.Title}}</h3>
 		<div class="col s9">
 			<div class="row">
-				<h3>{{.Title}}</h3>
 				<h5>{{.Tagline}}</h5>
 				<p>{{$.HTML .Content}}</p>
 			</div>
@@ -12,24 +12,22 @@
 				{{$applied := .AppliedBy $.User.ID}}
 				{{$joined := .JoinedBy $.User.ID}}
 				{{range .Requirements}}
-				<div class="col s3 center-align">
-					<p>{{.Name}}</p>
-					<input type="text" class="knob" value="{{$.Project.FilledRequirement .Name}}"
-						data-width="150"
-						{{if eq ($.Project.RequirementProgress .Name) 100}}
-						data-fgColor="#33bb33"
-						{{else if gt ($.Project.RequirementProgress .Name) 66}}
-						data-fgColor="#dddd33"
-						{{else if gt ($.Project.RequirementProgress .Name) 33}}
-						data-fgColor="#dd3333"
-						{{else}}
-						data-fgColor="#333333"
-						{{end}}
-						data-thickness=".2"
-						data-min="0"
-						data-max="{{$.Project.NeededRequirement .Name}}"
-						data-readOnly="true" >
-				</div>
+					{{if gt ($.Project.NeededRequirement .Name) 0}}
+					<div class="col s12 m6 l3 center-align">
+						<p>{{.Name}}</p>
+						<input type="text" class="knob" value="{{$.Project.FilledRequirement .Name}}"
+							data-width="150"
+							{{if eq ($.Project.RequirementProgress .Name) 100}}
+							data-fgColor="#33bb33"
+							{{else}}
+							data-fgColor="#333333"
+							{{end}}
+							data-thickness=".2"
+							data-min="0"
+							data-max="{{$.Project.NeededRequirement .Name}}"
+							data-readOnly="true" >
+					</div>
+					{{end}}
 				{{end}}
 			</div>
 			<div class="row">
@@ -45,45 +43,47 @@
 				</ul>
 			</div>
 		</div>
-		<div class="col s3">
+		<div class="col s3 center-align">
 			<div class="row">
-				<div class="label">
-					Start Date
-				</div>
-				<div class="value">
-					<h3 class="ui header">{{.StartDate.Format "02, Jan 2006"}}</h3>
-				</div>
+				Start Date
+				<h5><strong>{{.StartDate.Format "02, Jan 2006"}}</strong></h5>
 			</div>
 			<div class="row">
-				<div class="label">
-					End Date
-				</div>
-				<div class="value">
-					<h3 class="ui header">{{.EndDate.Format "02, Jan 2006"}}</h3>
-				</div>
+				End Date
+				<h5><strong>{{.EndDate.Format "02, Jan 2006"}}</strong></h5>
 			</div>
 			<div class="row">
-				<div class="label">
-					DaysLeft
-				</div>
-				<div class="value">
+				Days Left
+				<h5><strong>
 				{{if .Ended}}
-					<h3 class="ui header">Ended</h3>
+				Ended
 				{{else if .Started}}
-					{{.DaysLeft}}
+				{{.DaysLeft}}
 				{{else}}
-					<h3 class="ui header">Not Yet Started</h3>
+				Not Yet Started
 				{{end}}
-				</div>
+				</strong></h5>
 			</div>
 			<div class="row">
-				<div class="label">
-					Supports
-				</div>
-				<div class="value">
-					<h3 class="ui header">{{.Supports}}</h3>
+				<p>Supports</p>
+				<div>
+					<input type="text" class="knob" value="{{.Supports}}"
+						data-width="150"
+						data-fgColor="#333333"
+						data-thickness=".2"
+						data-readOnly="true" >
 				</div>
 			</div>
+			
+			{{if eq .Post.AuthorID $.User.ID}}
+			<a class="btn" href="/project/edit/{{.PostID}}">Edit Project</a>
+			{{else}}
+			<div class="row">
+				<a class="btn red" {{if not (.SupportedBy $.User.ID)}} href="/project?postID={{.PostID}}&method=support" {{end}}>
+					Support{{if .SupportedBy $.User.ID}}ed{{end}}
+				</a>
+			</div>
+			{{end}}
 		</div>
 	</div>
 	{{end}}

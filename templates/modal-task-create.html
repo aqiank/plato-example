@@ -1,6 +1,6 @@
-{{define "modal-create-task"}}
+{{define "modal-task-create"}}
 
-        <form class="modal" id="modal-create-task" action="/task" method="POST">
+        <form class="modal" id="modal-task-create" action="/task" method="POST">
                 <div class="modal-content">
                         <h4>Create Task</h4>
                         <div class="row">
@@ -17,20 +17,25 @@
 			</div>
 			<div class="row">
 				<div class="col s6">
-					<input id="task-start-date" type="date" class="datepicker">
+					<input id="task-start-date" type="date" name="startDate" class="datepicker">
 					<label for="task-start-date">Start Date</label>
 				</div>
 				<div class="col s6">
-					<input id="task-end-date" type="date" class="datepicker">
+					<input id="task-end-date" type="date" name="endDate" class="datepicker">
 					<label for="task-end-date">End Date</label>
 				</div>
 			</div>
 			<p>
-				<input id="task-restricted" type="checkbox" class="filled-in">
+				<input id="task-is-milestone" type="checkbox" name="isMilestone" value="true" class="filled-in">
+				<label for="task-is-milestone">Is Milestone?</label>
+			</p>
+			<p>
+				<input id="task-restricted" type="checkbox" name="restricted" value="true" class="filled-in">
 				<label for="task-restricted">Restricted</label>
 			</p>
                 </div>
 		<div class="modal-footer">
+			<input type="hidden" name="postID" value="{{.Project.PostID}}">
 			<button type="submit" class="modal-action btn-flat teal white-text">Submit</button>
 		</div>
         </form>

@@ -24,12 +24,13 @@ func main() {
 	handleDashboard()
 	handleProfile()
 	handleSearch()
+	handleTask()
 
 	// Demonstrate page handler
 	page.Handle("/", indexPageHandler)
 
 	// Demonstrate files handler
-	server.ServeFiles("/css/", "/font/", "/img/", "/js/", "/lib/", "/pt-data/")
+	server.ServeFiles("/css/", "/font/", "/img/", "/js/", "/jsx/", "/lib/", "/pt-data/")
 
 	// Demonstrate service
 	service.AttachAll(service.Service{

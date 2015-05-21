@@ -2,124 +2,45 @@
         {{.Include `<script src="/js/script-dashboard.js"></script>`}}
         {{template "header" .}}
 
-	<div id="timeline" class="ui grid"></div>
+	<div id="timeline"></div>
 
-	<div class="ui vertical padded page grid">
-		<div class="row">
-			<div class="ui segment column grid">
-				<h3 class="ui header">Dashboard</h3>
-				<div class="sixteen wide column">
-					<h4 class="ui header">New Projects</h4>
-					<div class="ui cards">
-					{{range call .LatestRelatedProjects $.User.Profession 3}}
-						<div class="card">
-							<a class="image" href="/project/{{.PostID}}">
-								{{with .ImageURL}}
-								<img src="{{.}}">
-								{{else}}
-								<img src="/img/dummies/project.png">
-								{{end}}
-							</a>
-							<div class="content">
-								<a class="header" href="/project/{{.PostID}}">{{.Title}}</a>
-								<div class="meta">
-									Project
-								</div>
-								<div class="description">
-									{{.ShortContent 140}}
-								</div>
-							</div>
-						</div>
-					{{end}}
-					</div>
-				</div>
-				<div class="sixteen wide column">
-					<h4 class="ui header">Activities</h4>
-					<div class="ui feed">
-						{{range .GetActivities .User.ID}}
-							{{if eq .Type "comment"}}
-							{{with $comment := $.GetComment .SourceID}}
-							<div class="event">
-								<div class="label">
-									<img src="{{.Author.AvatarURL}}">
-								</div>
-								<div class="content">
-									<div class="summary">
-										<a href="/profile/{{.AuthorID}}">
-											{{.Author.Nicename}}
-										</a> commented on the project
-										<a href="/project/{{.PostID}}">
-											{{.Post.Title}}
-										</a>
-										<div class="date">{{nicetime .CreatedAt}}</div>
-									</div>
-									<div class="extra text">
-										{{$comment.Text}}
-									</div>
-									<div class="meta">
-										<a class="like">
-											<i class="like icon"></i> 11 Likes
-										</a>
-									</div>
-								</div>
-							</div>
-							{{end}}
-							{{else if eq .Type "create project"}}
-							<div class="event">
-								<div class="label">
-									<img src="{{.User.AvatarURL}}">
-								</div>
-								<div class="content">
-									<div class="summary">
-										<a href="/profile/{{.UserID}}">{{.User.Nicename}}</a> created a project called <a href="/project/{{.SourceID}}">{{.Post.Title}}</a>
-										<div class="date">{{nicetime .CreatedAt}}</div>
-									</div>
-									<div class="extra images">
-										{{$project := call $.GetProject .SourceID}}
-										<a><img src="{{$project.ImageURL}}"></a>
-									</div>
-									<div class="meta">
-										<a class="like">
-											<i class="like icon"></i> 1 Like
-										</a>
-									</div>
-								</div>
-							</div>
-							{{end}}
-						{{else}}
-							No activities!
-						{{end}}
-					</div>
-				</div>
-				<div class="sixteen wide column">
-					<h4 class="ui header">Applicants</h4>
-					<div class="ui cards">
-						{{range call .GetMembersOfProjectsBy .User.ID "pending"}}
-						<div class="card">
-							<a class="image">
-								<img src="{{.User.AvatarURL}}">
-							</a>
-							<div class="content">
-								<a class="header">{{.User.Nicename}}</a>
-								<div class="meta">
-									<a>Friends</a>
-								</div>
-								<div class="description">
-									{{.User.ShortDescription 140}}
-								</div>
-							</div>
-							<div class="extra content">
-								<a href="/profile/{{.UserID}}">View Profile</a>
-								<a href="/project?method=accept&postID={{.PostID}}&applicantUserID={{.UserID}}">Accept</a>
-								<a href="/project?method=decline&postID={{.PostID}}&applicantUserID={{.UserID}}">Decline</a>
-							</div>
-						</div>
-						{{else}}
-						No applicants!
-						{{end}}
-					</div>
+	<div class="container">
+		<div class="col s12">
+			<h4>Dashboard</h4>
+
+			<div class="row">
+				<h5>New Projects</h5>
+				<div class="oi-projects row">
+				{{range call .LatestRelatedProjects $.User.Profession 6}}
+					{{template "project-card" .}}
+				{{end}}
 				</div>
 			</div>
+
+			<div class="row">
+				<h5>Applicants</h5>
+				<div class="oi-projects row">
+					{{range call .GetMembersOfProjectsBy .User.ID "pending"}}
+					<div class="card">
+						<a class="card-image">
+							<img src="{{.User.AvatarURL}}">
+						</a>
+						<div class="card-content">
+							<span class="title grey-text text-darken-3">{{.User.Nicename}}</a>
+							<p>{{.User.ShortDescription 140}}</p>
+						</div>
+						<div class="card-action">
+							<a href="/profile/{{.UserID}}">View Profile</a>
+							<a href="/project?method=accept&postID={{.PostID}}&applicantUserID={{.UserID}}">Accept</a>
+							<a href="/project?method=decline&postID={{.PostID}}&applicantUserID={{.UserID}}">Decline</a>
+						</div>
+					</div>
+					{{else}}
+					No applicants!
+					{{end}}
+				</div>
+			</div>
+
 		</div>
 	</div>
 

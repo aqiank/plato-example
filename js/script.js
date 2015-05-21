@@ -32,6 +32,24 @@ $(document).ready(function() {
 		selectMonths: true,
 		selectYears: 5,
 	});
+
+	// projects
+	$(".oi-projects").owlCarousel({
+		items: 3,
+		autoplay: true,
+		autoplayTimeout: 10000,
+		responsive: {
+			0: {
+				items: 1
+			},
+			800: {
+				items: 2
+			},
+			1000: {
+				items: 3
+			}
+		}
+	});
 });
 
 function setImageInputPreview(input, preview, uploadURL, success) {

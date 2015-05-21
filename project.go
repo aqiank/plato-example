@@ -78,6 +78,7 @@ type Project interface {
 	NeededRequirement(string) int64
 	RequirementProgress(string) int64
 	Requirements() []Requirement
+	Tasks() []Task
 	SupportedBy(int64) bool
 	AppliedBy(int64) bool
 	JoinedBy(int64) bool
@@ -216,6 +217,22 @@ func (p project) Requirements() []Requirement {
 	}
 
 	return ps
+}
+
+func (p project) Tasks() []Task {
+	return getTasks(p.postID)
+}
+
+func (p project) DoneTasks() []Task {
+	return getDoneTasks(p.postID)
+}
+
+func (p project) RemainingTasks() []Task {
+	return getRemainingTasks(p.postID)
+}
+
+func (p project) MilestoneTasks() []Task {
+	return getMilestoneTasks(p.postID)
 }
 
 func (p project) SupportedBy(userID int64) bool {

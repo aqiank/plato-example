@@ -1,45 +1,46 @@
 {{define "project_tab_content_tasks"}}
 
-	{{template "modal-create-task" .}}
+	{{template "modal-task-create" .}}
+	{{template "modal-task-edit" .}}
 
 	{{with .Project}}
+	{{$tasks := .Tasks}}
 	<div id="tasks" class="col s12">
-		<div id="sticky-context" class="ui segment">
-			<div class="ui vertically padded grid">
-				<div class="column">
-					<h3>Tasks</h3>
-				</div>
+		<h3>Tasks</h3>
+		<div class="col s9">
+			<ul class="collection">
+				{{range $tasks}}
+				<a class="modal-trigger task-edit-trigger" href="#modal-task-edit" data-taskID="{{.ID}}">
+					<li class="collection-item">
+						{{.Title}}<small class="right">by {{.User.Nicename}}</small>
+					</li>
+				</a>
+				{{end}}
+				<a class="modal-trigger white-text center-align" href="#modal-task-create">
+					<li class="collection-item teal">
+						<strong style="font-size: 2rem">+</strong>
+					</li>
+				</a>
+			</ul>
+		</div>
+		<div class="col s3 center-align">
+			<div class="row">
+				<p>Total</p>
+				<input type="text" class="knob" value="{{len $tasks}}"
+					data-width="150"
+					data-fgColor="#333333"
+					data-thickness=".2"
+					data-max="{{len $tasks}}"
+					data-readOnly="true" >
 			</div>
-			<div class="right ui rail">
-				<div class="ui sticky four wide column">
-					<div class="row">
-						<div class="label">
-							Total Tasks
-						</div>
-						<div class="value">
-							<h3 class="ui header">133</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="label">
-							Tasks Remaining
-						</div>
-						<div class="value">
-							<h3 class="ui header">81</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="label">
-							Tasks Done
-						</div>
-						<div class="value">
-							<h3 class="ui header">52</h3>
-						</div>
-					</div>
-					<div class="row">
-						<a class="modal-trigger btn btn-flat teal white-text" href="#modal-create-task">Create Task</a>
-					</div>
-				</div>
+			<div class="row">
+				<p>Done</p>
+				<input type="text" class="knob" value="{{len .DoneTasks}}"
+					data-width="150"
+					data-fgColor="#333333"
+					data-thickness=".2"
+					data-max="{{len $tasks}}"
+					data-readOnly="true" >
 			</div>
 		</div>
 	</div>
