@@ -2,36 +2,41 @@
         {{.Include `<script src="/js/script-project-new.js"></script>`}}
         {{template "header" .}}
 
-        <div class="ui vertical padded page grid">
-                <div class="column">
-                        <h3 class="ui header">New Project</h3>
-                        <form id="form-project-new" class="ui form" action="/project" method="POST" enctype="multipart/form-data">
-                                <h4 class="ui dividing header">Project Image</h4>
-                                <label class="field">
+        <div class="row">
+                <div class="container">
+                        <h3>New Project</h3>
+                        <form id="form-project-new" action="/project" method="POST" enctype="multipart/form-data">
+                                <h4>Project Image</h4>
+                                <label>
                                         <input class="pt-img-input" id="image-input" type="file" name="image">
 					<img class="pt-img-preview" id="image-preview" src="/img/dummies/project.png" style="width: 100%">
                                 </label>
-                                <h4 class="ui dividing header">Project Information</h4>
-                                <div class="required field">
+                                <h4>Project Information</h4>
+                                <div class="input-field col s12">
                                         <label>Title</label>
                                         <input type="text" name="title">
                                 </div>
-                                <div class="required field">
+                                <div class="input-field col s12">
                                         <label>Description</label>
-                                        <textarea name="content"></textarea>
+                                        <textarea name="content" class="materialize-textarea"></textarea>
                                 </div>
-                                <div class="required field">
+                                <div class="input-field col s12">
                                         <label>Tagline</label>
                                         <input type="text" name="tagline">
                                 </div>
-                                <div class="field">
+                                <div class="col s12">
                                         <h4>Requirements</h4>
-                                        <div class="four fields">
+                                        <div class="row">
 						{{range .Professions}}
-                                                <div class="field range-wrapper">
-                                                        <label data-name="{{.}}s">0 {{.}}s</label>
-                                                        <input name="profession {{.}}" type="range" min="0" max="10" value="0">
-                                                </div>
+						<div class="col s3">
+							<p>{{.}}</p>
+							<input type="text" class="knob" name="profession {{.}}" value="0"
+								data-width="150"
+								data-fgColor="#333333"
+								data-thickness=".2"
+								data-min="0" 
+								data-max="10" >
+						</div>
 						{{end}}
                                         </div>
                                 </div>
@@ -39,19 +44,18 @@
                                         <h4>Timeline</h4>
                                         <div class="required field">
                                                 <label>Start Date</label>
-                                                <input id="start-date" name="startDate" class="datepicker">
+                                                <input id="start-date" name="startDate" type="date" class="datepicker">
                                         </div>
                                         <div class="required field">
                                                 <label>End Date</label>
-                                                <input id="end-date" name="endDate" class="datepicker">
+                                                <input id="end-date" name="endDate" type="date" class="datepicker">
                                         </div>
                                 </div>
 				<input type="hidden" name="method" value="POST">
-                                <button type="submit" class="ui submit button">Submit</button>
+                                <button type="submit" class="btn">Submit</button>
                         </form>
                 </div>
         </div>
 
-        {{template "sidebar" .}}
         {{template "footer" .}}
 {{end}}

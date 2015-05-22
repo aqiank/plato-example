@@ -16,6 +16,7 @@ import (
 	"plato/entity"
 	"plato/server/api"
 	"plato/server/page"
+	"plato/server/response"
 	"plato/server/service"
 	"plato/server/session"
 )
@@ -447,7 +448,7 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 		// generate timeline
 		generateTimeline(user)
 		joinProject(postID, user.ID())
-		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/", postID), 302)
+		response.OK(w, "/project/" + strconv.FormatInt(postID, 10));
 	case "PUT":
 		if err = updateProject(postID, tagline, status, imageURL, startDate, endDate); err != nil {
 			return nil, debug.Error(err)
@@ -455,7 +456,7 @@ func projectHandler(w http.ResponseWriter, r *http.Request, bundle interface{}) 
 		if err = updateRequirement(postID, r); err != nil {
 			return nil, debug.Error(err)
 		}
-		http.Redirect(w, r, fmt.Sprintf("%s%d", "/project/edit/", postID), 302)
+		response.OK(w, "/project/edit/" + strconv.FormatInt(postID, 10));
 	case "GET":
 		// TODO
 	}

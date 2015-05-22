@@ -50,6 +50,38 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$("#modal-sign-in").submit(function(e) {
+		var form = $(this);
+		$.ajax({
+			url: form.attr("action"),
+			method: "POST",
+			data: form.serialize(),
+			dataType: "json",
+		}).done(function(resp) {
+			Materialize.toast("Successfully logged in!", 1000, "green");
+			window.location = "/";
+		}).fail(function(resp) {
+			Materialize.toast(resp.responseText, 1000, "red");
+		});
+		e.preventDefault();
+	});
+
+	$("#modal-sign-up").submit(function(e) {
+		var form = $(this);
+		$.ajax({
+			url: form.attr("action"),
+			method: "POST",
+			data: form.serialize(),
+			dataType: "json",
+		}).done(function(resp) {
+			Materialize.toast("Sent a verification code to your email!", 1000, "green");
+			window.location = "/";
+		}).fail(function(resp) {
+			Materialize.toast(resp.responseText, 1000, "red");
+		});
+		e.preventDefault();
+	});
 });
 
 function setImageInputPreview(input, preview, uploadURL, success) {
